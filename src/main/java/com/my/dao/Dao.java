@@ -1,17 +1,41 @@
 package com.my.dao;
 
 import com.my.entity.Entity;
-import com.my.exception.DBException;
+import com.my.exception.DAOException;
+import com.my.exception.Messages;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public interface Dao<T extends Entity> {
-    void insert(T entity) throws DBException;
-    void delete(long id);
-    T get(long id) throws DBException;
-    List<T> listAll() throws DBException;
+    void insert(T entity) throws DAOException;
+    void delete(Long id);
+    T get(Long id) throws DAOException;
+    void update(T entity) throws DAOException;
+    List<T> getAll() throws DAOException;
 
-    /*default Connection getConnection() throws DBException {
-        return ConnectionBuilder.getInstance().getConnection();
-    }*/
+    default void closeStatement(Statement statement) throws DAOException {
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException ex) {
+                throw new DAOException(Messages.ERR_CANNOT_CLOSE_STATEMENT, ex);
+            }
+        }
+    }
+
+    /**
+     * Closes a result set object.
+     */
+    default void closeResultSet(ResultSet rs) throws DAOException {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException ex) {
+                throw new DAOException(Messages.ERR_CANNOT_CLOSE_RESULTSET, ex);
+            }
+        }
+    }
 }

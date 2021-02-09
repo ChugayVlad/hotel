@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.sql.Date;
 import java.time.LocalDate;
 
 
@@ -28,8 +29,8 @@ public class CreateOrderCommand implements Command {
         OrderService orderService;
         Order order = new Order();
         order.setPlaces(Integer.parseInt(request.getParameter("places")));
-        order.setDateIn(LocalDate.parse(request.getParameter("dateIn")));
-        order.setDateOut(LocalDate.parse(request.getParameter("dateOut")));
+        order.setDateIn(Date.valueOf(LocalDate.parse(request.getParameter("dateIn"))));
+        order.setDateOut(Date.valueOf(LocalDate.parse(request.getParameter("dateOut"))));
 
         RoomTypeService typeService = new RoomTypeServiceImpl();
         RoomType type = typeService.getById(Integer.parseInt(request.getParameter("roomType")));
@@ -37,8 +38,8 @@ public class CreateOrderCommand implements Command {
         order.setType(type);
         //order.setRoom();
 
-        order.setUser((User) session.getAttribute("user"));
-        LOG.trace((User) session.getAttribute("user"));
+        User user = (User) session.getAttribute("user");
+        order.setUserId(user.getId());
         orderService = new OrderServiceImpl();
         orderService.insertOrder(order);
 

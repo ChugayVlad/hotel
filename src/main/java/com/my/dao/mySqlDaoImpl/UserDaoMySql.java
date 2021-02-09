@@ -1,14 +1,11 @@
 package com.my.dao.mySqlDaoImpl;
 
 
-import com.my.dao.DatabaseAbstractDao;
 import com.my.dao.UserDao;
 import com.my.entity.User;
-import com.my.exception.DBException;
-import com.my.exception.Messages;
+import com.my.exception.DAOException;
 import org.apache.log4j.Logger;
 
-import javax.sql.DataSource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,25 +15,21 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoMySql extends DatabaseAbstractDao implements UserDao {
+public class UserDaoMySql implements UserDao {
     private static final Logger LOG = Logger.getLogger(UserDaoMySql.class);
+    private Connection con;
     private static final String SQL_SELECT_ALL = "SELECT * FROM users";
     private static final String SQL_FIND_USER_BY_EMAIL = "SELECT * FROM users WHERE email=?";
     private static final String SQL_INSERT_USER = "INSERT INTO users (id, first_name, last_name, email, password, role_id) VALUES (DEFAULT, ?, ?, ?, ?, ?)";
 
-    public UserDaoMySql(DataSource ds) {
-        super(ds);
+    public UserDaoMySql(Connection con) {
+        this.con = con;
     }
 
     @Override
-    public void insert(User user) throws DBException {
-        Connection con = null;
+    public void insert(User user) throws DAOException {
         PreparedStatement stmt = null;
         try {
-            con = getConnection();
-
-            con.setAutoCommit(false);
-
             stmt = con.prepareStatement(SQL_INSERT_USER);
             int k = 0;
             stmt.setString(++k, user.getFirstName());
@@ -44,77 +37,69 @@ public class UserDaoMySql extends DatabaseAbstractDao implements UserDao {
             stmt.setString(++k, user.getEmail());
             stmt.setString(++k, user.getPassword());
             stmt.setInt(++k, user.getRoleId());
-
             stmt.executeUpdate();
-            con.commit();
         } catch (SQLException e) {
-            rollback(con);
-            LOG.error(Messages.ERR_CANNOT_CREATE_USER);
-            throw new DBException(Messages.ERR_CANNOT_CREATE_USER, e);
+            LOG.error("Cannot insert user", e);
+            throw new DAOException("Cannot insert user", e);
         } finally {
-            close(stmt);
-            close(con);
+            closeStatement(stmt);
         }
     }
 
     @Override
-    public void delete(long id) {
+    public void update(User entity) throws DAOException {
 
     }
 
     @Override
-    public User get(long id) {
+    public void delete(Long id) {
+
+    }
+
+    @Override
+    public User get(Long id) {
         return null;
     }
 
     @Override
-    public List<User> listAll() throws DBException{
+    public List<User> getAll() throws DAOException {
         List<User> users = new ArrayList<>();
-        Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
-
         try {
-            con = getConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(SQL_SELECT_ALL);
-            while (rs.next()){
+            while (rs.next()) {
                 users.add(extractUser(rs));
             }
-            con.commit();
         } catch (SQLException e) {
-            rollback(con);
-            LOG.error(Messages.ERR_CANNOT_OBTAIN_USERS);
-            throw new DBException(Messages.ERR_CANNOT_OBTAIN_USERS, e);
+            LOG.error("Cannot get all users", e);
+            throw new DAOException("Cannot get all users", e);
         } finally {
-            close(con, stmt, rs);
+            closeResultSet(rs);
+            closeStatement(stmt);
         }
         return users;
     }
 
     @Override
-    public User getUserByEmail(String email) throws DBException{
+    public User getUserByEmail(String email) throws DAOException{
         User user = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        Connection con = null;
         try {
-            con = getConnection();
-
-            con.setAutoCommit(false);
-
             pstmt = con.prepareStatement(SQL_FIND_USER_BY_EMAIL);
             pstmt.setString(1, email);
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 user = extractUser(rs);
             }
-            con.commit();
-        } catch (SQLException ex) {
-            rollback(con);
-            throw new DBException(Messages.ERR_CANNOT_OBTAIN_USER_BY_EMAIL, ex);
+        } catch (SQLException e) {
+            LOG.error("Cannot get user by email", e);
+            throw new DAOException("Cannot get user by email", e);
         } finally {
-            close(con, pstmt, rs);
+            closeResultSet(rs);
+            closeStatement(pstmt);
         }
         return user;
     }

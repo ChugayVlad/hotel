@@ -46,8 +46,8 @@
             </c:if>
 
             <%-- if we get this page using forward --%>
-            <c:if test="${not empty requestScope.errorMessage}">
-                <h3>${requestScope.errorMessage}</h3>
+            <c:if test="${not empty errorMessage}">
+                <h3>${errorMessage}</h3>
             </c:if>
 
             <%-- CONTENT --%>

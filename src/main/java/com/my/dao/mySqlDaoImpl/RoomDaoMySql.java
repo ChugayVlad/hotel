@@ -1,28 +1,33 @@
 package com.my.dao.mySqlDaoImpl;
 
-import com.my.dao.DatabaseAbstractDao;
+
 import com.my.dao.RoomDao;
 import com.my.entity.Room;
 import com.my.entity.RoomStatus;
 import com.my.entity.RoomType;
-import com.my.exception.DBException;
-import com.my.exception.Messages;
+import com.my.exception.DAOException;
 import org.apache.log4j.Logger;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomDaoMySql extends DatabaseAbstractDao implements RoomDao {
+public class RoomDaoMySql implements RoomDao {
     private static final Logger LOG = Logger.getLogger(RoomDaoMySql.class);
-    private static final String SQL_SELECT_ALL = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id";
 
-    public RoomDaoMySql(DataSource ds) {
-        super(ds);
+    private static final String SQL_SELECT_ALL = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id";
+    private static final String SQL_UPDATE_STATUS = "UPDATE rooms SET status = ? WHERE id=?";
+    private static final String SQL_SELECT_BY_ID = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id WHERE rooms.id=?";
+    private static final String SQL_SELECT_ALL_BY_PARAMETERS = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id WHERE type_id=? AND places=? AND status = 'VACANT'";
+
+
+    private Connection con;
+    public RoomDaoMySql(Connection con) {
+        this.con = con;
     }
 
     @Override
@@ -31,38 +36,90 @@ public class RoomDaoMySql extends DatabaseAbstractDao implements RoomDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Long id) {
 
     }
 
     @Override
-    public Room get(long id) {
-        return null;
+    public void update(Room entity) throws DAOException {
+
     }
 
     @Override
-    public List<Room> listAll() throws DBException {
+    public Room get(Long id) throws DAOException {
+        Room room = new Room();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = con.prepareStatement(SQL_SELECT_BY_ID);
+            pstmt.setLong(1, id);
+            rs = pstmt.executeQuery();
+            if(rs.next()){
+                room = extractRoom(rs);
+            }
+        } catch (SQLException e) {
+            LOG.error("Cannot get room by id", e);
+            throw new DAOException("Cannot get room by id", e);
+        }
+        return room;
+    }
+
+    @Override
+    public List<Room> getAll() throws DAOException {
         List<Room> rooms = new ArrayList<>();
-        Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
         try {
-            con = getConnection();
-
-            con.setAutoCommit(false);
-
             stmt = con.createStatement();
             rs = stmt.executeQuery(SQL_SELECT_ALL);
-            while (rs.next()){
+            while (rs.next()) {
                 rooms.add(extractRoom(rs));
             }
-            con.commit();
         } catch (SQLException e) {
-            rollback(con);
-            LOG.error(Messages.ERR_CANNOT_OBTAIN_ROOMS);
-            throw new DBException(Messages.ERR_CANNOT_OBTAIN_ROOMS, e);
+            LOG.error("Cannot get room all rooms", e);
+            throw new DAOException("Cannot get all rooms", e);
         } finally {
-            close(con, stmt, rs);
+            closeResultSet(rs);
+            closeStatement(stmt);
+        }
+        return rooms;
+    }
+
+    @Override
+    public void updateStatus(RoomStatus status, Long id) throws DAOException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = con.prepareStatement(SQL_UPDATE_STATUS);
+            stmt.setString(1, String.valueOf(status));
+            stmt.setString(2, String.valueOf(id));
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Cannot update room status", e);
+            throw new DAOException("Cannot update room status", e);
+        } finally {
+            closeStatement(stmt);
+        }
+    }
+
+    @Override
+    public List<Room> findRoomsByParameters(Integer places, Integer typeId) throws DAOException {
+        List<Room> rooms = new ArrayList<>();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = con.prepareStatement(SQL_SELECT_ALL_BY_PARAMETERS);
+            pstmt.setLong(1, typeId);
+            pstmt.setLong(2, places);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                rooms.add(extractRoom(rs));
+            }
+        } catch (SQLException e) {
+            LOG.error("Cannot get rooms by parameters", e);
+            throw new DAOException("Cannot get rooms by parameters", e);
+        } finally {
+            closeResultSet(rs);
+            closeStatement(pstmt);
         }
         return rooms;
     }

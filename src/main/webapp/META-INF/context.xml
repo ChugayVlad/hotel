@@ -5,8 +5,8 @@
               maxActive="100"
               maxIdle="30"
               maxWait="10000"
-              username="root"
-              password="2103"
+              username="testuser"
+              password="testpass"
               driverClassName="com.mysql.cj.jdbc.Driver"
 
               defaultTransactionIsolation="READ_COMMITTED"

@@ -12,29 +12,26 @@
             ===========================================================================--%>
 
             <div id="leftHeader">
-
                 <c:choose>
-
                     <%--===========================================================================
                     This way we define the ADMIN MENU.
                     ===========================================================================--%>
                     <c:when test="${userRole.name == 'admin' }">
-                        <a href="controller?command=listOrders">All orders</a> &nbsp;
+                        <a href="controller?command=showOrders">All orders</a> &nbsp;
                     </c:when>
-
 
                     <%--===========================================================================
                     This way we define the USER MENU.
                     ===========================================================================--%>
                     <c:when test="${userRole.name == 'client'}">
-                        <a href="controller?command=listMenu">Menu</a> &nbsp;
+                        <a href="controller?command=showRooms">Main page</a> &nbsp;
                     </c:when>
                 </c:choose>
 
                     <%--===========================================================================
                     This way we define the settings anchor.
                     ===========================================================================--%>
-                <a href="controller?command=personalAccount">Personal account</a> &nbsp;
+                <a href="controller?command=openPersonalAccount">Personal account</a> &nbsp;
 
             </div>
 
@@ -42,7 +39,6 @@
             This way we define the menu located at the right of header.
             ===========================================================================--%>
             <div id="rightHeader" >
-
                     <%--===========================================================================
                     Type user name if the user object is presented in the current session.
                     ===========================================================================--%>
@@ -67,10 +63,9 @@
 
         <c:if test="${empty user and title ne 'Login'}">
             <div id="rightHeader">
-                <a href="../../login.jsp">Login</a>
+                <a href="controller?command=login">Login</a>
             </div>
         </c:if>
-
     </td>
 </tr>
 

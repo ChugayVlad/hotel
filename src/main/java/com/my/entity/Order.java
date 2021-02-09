@@ -1,14 +1,15 @@
 package com.my.entity;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Order extends Entity {
     private Integer places;
-    private LocalDate dateIn;
-    private LocalDate dateOut;
+    private Date dateIn;
+    private Date dateOut;
     private RoomType type;
-    private User user;
-    private Room room;
+    private Long userId;
+    private Long roomId;
 
     public Integer getPlaces() {
         return places;
@@ -18,19 +19,19 @@ public class Order extends Entity {
         this.places = places;
     }
 
-    public LocalDate getDateIn() {
+    public Date getDateIn() {
         return dateIn;
     }
 
-    public void setDateIn(LocalDate dateIn) {
+    public void setDateIn(Date dateIn) {
         this.dateIn = dateIn;
     }
 
-    public LocalDate getDateOut() {
+    public Date getDateOut() {
         return dateOut;
     }
 
-    public void setDateOut(LocalDate dateOut) {
+    public void setDateOut(Date dateOut) {
         this.dateOut = dateOut;
     }
 
@@ -42,20 +43,20 @@ public class Order extends Entity {
         this.type = type;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public Room getRoom() {
-        return room;
+    public Long getRoomId() {
+        return roomId;
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
+    public void setRoomId(Long roomId) {
+        this.roomId = roomId;
     }
 
     @Override
@@ -65,8 +66,8 @@ public class Order extends Entity {
                 ", dateIn=" + dateIn +
                 ", dateOut=" + dateOut +
                 ", type=" + type +
-                ", user=" + user +
-                ", room=" + room +
+                ", userId=" + userId +
+                ", roomId=" + roomId +
                 '}';
     }
 }

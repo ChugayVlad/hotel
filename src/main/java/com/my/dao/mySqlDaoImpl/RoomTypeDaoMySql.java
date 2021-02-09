@@ -1,14 +1,10 @@
 package com.my.dao.mySqlDaoImpl;
 
-import com.my.dao.DatabaseAbstractDao;
 import com.my.dao.RoomTypeDao;
 import com.my.entity.RoomType;
-import com.my.entity.User;
-import com.my.exception.DBException;
-import com.my.exception.Messages;
+import com.my.exception.DAOException;
 import org.apache.log4j.Logger;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,13 +13,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomTypeDaoMySql extends DatabaseAbstractDao implements RoomTypeDao {
-    private static final Logger LOG = Logger.getLogger(DatabaseAbstractDao.class);
+public class RoomTypeDaoMySql implements RoomTypeDao {
+    private static final Logger LOG = Logger.getLogger(RoomTypeDaoMySql.class);
+    private Connection con;
     private static final String SQL_SELECT_ALL = "SELECT * FROM room_types";
     private static final String SQL_GET_BY_ID = "SELECT * FROM room_types WHERE id=?";
 
-    public RoomTypeDaoMySql(DataSource ds) {
-        super(ds);
+    public RoomTypeDaoMySql(Connection con) {
+        this.con = con;
     }
 
     @Override
@@ -32,18 +29,21 @@ public class RoomTypeDaoMySql extends DatabaseAbstractDao implements RoomTypeDao
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Long id) {
 
     }
 
     @Override
-    public RoomType get(long id) throws DBException {
+    public void update(RoomType entity) throws DAOException {
+
+    }
+
+    @Override
+    public RoomType get(Long id) throws DAOException {
         RoomType roomType = null;
-        Connection con = null;
         PreparedStatement statement = null;
         ResultSet rs = null;
         try {
-            con = getConnection();
             statement = con.prepareStatement(SQL_GET_BY_ID);
             statement.setLong(1, id);
             rs = statement.executeQuery();
@@ -51,37 +51,32 @@ public class RoomTypeDaoMySql extends DatabaseAbstractDao implements RoomTypeDao
                 roomType = extractRoomType(rs);
             }
         } catch (SQLException e) {
-            rollback(con);
-            LOG.error(Messages.ERR_CANNOT_GET_ROOM_TYPE_BY_ID);
-            throw new DBException(Messages.ERR_CANNOT_GET_ROOM_TYPE_BY_ID, e);
+            LOG.error("Cannot get room type", e);
+            throw new DAOException("Cannot get room type", e);
+        } finally {
+            closeResultSet(rs);
+            closeStatement(statement);
         }
         return roomType;
     }
 
     @Override
-    public List<RoomType> listAll() throws DBException {
+    public List<RoomType> getAll() throws DAOException {
         List<RoomType> types = new ArrayList<>();
-        Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
         try {
-            con = getConnection();
-
-            con.setAutoCommit(false);
-
             stmt = con.createStatement();
             rs = stmt.executeQuery(SQL_SELECT_ALL);
             while (rs.next()){
-
                 types.add(extractRoomType(rs));
             }
-            con.commit();
         } catch (SQLException e) {
-            rollback(con);
-            LOG.error(Messages.ERR_CANNOT_OBTAIN_ROOM_TYPES);
-            throw new DBException(Messages.ERR_CANNOT_OBTAIN_ROOM_TYPES, e);
+            LOG.error("Cannot get all room types", e);
+            throw new DAOException("Cannot get all room types", e);
         } finally {
-            close(con, stmt, rs);
+            closeResultSet(rs);
+            closeStatement(stmt);
         }
         return types;
     }

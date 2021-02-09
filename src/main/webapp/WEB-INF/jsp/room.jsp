@@ -14,7 +14,7 @@
 <body>
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 ROOM DESCRIPTION
-<form>
+<form id="room_description" action="controller" method="post">
     <c:out value="${roomId}"/>
     <input type="hidden" name="command" value="bookRoom"/>
     <input type="hidden" name="roomId" value="${roomId}">

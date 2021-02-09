@@ -13,6 +13,7 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
+<c:if test="${user.roleId ne 0}">
 <form id="order" action="controller" method="post">
     <input type="hidden" name="command" value="makeOrder"/>
 
@@ -46,7 +47,7 @@
     </fieldset>
     <input type="submit" value="Make order">
 </form>
-
+</c:if>
 
 <table id="rooms-list">
 
@@ -68,17 +69,11 @@
             <td><c:out value="${room.price}"/></td>
             <td><c:out value="${room.status}"/></td>
             <td>
-                <%--<form id="room_description" action="controller" method="post">
-                    <input type="hidden" name="command" value="roomDescription"/>
-                    <input type="hidden" name="roomId" value="${room.id}">
-                    <input type="submit" value="Room description"/>
-                </form>--%>
                 <a href="controller?command=roomDescription&roomId=${room.id}">Select room</a>
             </td>
         </tr>
     </c:forEach>
     </tbody>
-
 </table>
 </body>
 </html>

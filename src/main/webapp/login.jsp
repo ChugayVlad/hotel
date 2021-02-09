@@ -30,7 +30,7 @@
                 <input type="submit" value="Login">
             </form>
 
-            <a href="controller?command=open_registration">Sign up</a>
+            <a href="controller?command=register">Sign up</a>
         </td>
     </tr>
 </table>

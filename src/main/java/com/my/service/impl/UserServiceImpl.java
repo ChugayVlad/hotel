@@ -1,51 +1,68 @@
 package com.my.service.impl;
 
-import com.my.dao.factory.DaoFactoryMySql;
+import com.my.dao.datasource.DatasourceType;
+import com.my.dao.factory.DaoFactory;
 import com.my.dao.UserDao;
 import com.my.entity.User;
 import com.my.exception.AppException;
-import com.my.exception.DBException;
+import com.my.exception.DAOException;
 import com.my.exception.Messages;
+import com.my.exception.ServiceException;
 import com.my.service.UserService;
 import org.apache.log4j.Logger;
+
+import java.sql.SQLException;
 
 public class UserServiceImpl implements UserService {
     private static final Logger LOG = Logger.getLogger(UserServiceImpl.class);
 
-    //==TO DO ========
-    private UserDao userDao;
+    private static final DatasourceType dbType = DatasourceType.MY_SQL;
+    private static DaoFactory daoFactory;
 
-    public UserServiceImpl() throws AppException {
+    static {
         try {
-        userDao = DaoFactoryMySql.getUserDao();
-        } catch (DBException e) {
-            LOG.error("Can not get user dao", e);
-            throw new AppException("Database error"); //=======|||||||||||||||||||||||||||||||||||||||
+            daoFactory = DaoFactory.getDaoFactory(dbType);
+        } catch (DAOException e) {
+            LOG.error(e);
         }
     }
-    //=================
 
     @Override
     public User findUser(String email, String password) throws AppException {
-        if (email == null || password == null || email.isEmpty() || password.isEmpty()){
+        if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
             throw new AppException("Login/password cannot be empty");
         }
-        User user = userDao.getUserByEmail(email);
-        LOG.trace("Found in DB: user --> " + user);
-
-        if (user == null || !password.equals(user.getPassword())){
-            throw new AppException("Cannot find user with such login/password");
+        User user = new User();
+        UserDao userDao;
+        try {
+            daoFactory.open();
+            userDao = daoFactory.getUserDao();
+            user = userDao.getUserByEmail(email);
+            LOG.trace("Found in DB: user --> " + user);
+            if (user == null || !password.equals(user.getPassword())) {
+                throw new AppException("Cannot find user with such login/password");
+            }
+        } catch (DAOException e) {
+            LOG.error(e);
+            throw new ServiceException("Can not find user", e);
+        } finally {
+            daoFactory.close();
         }
         return user;
     }
 
     @Override
     public void insertUser(User user) throws AppException {
+        UserDao userDao;
         try {
+            daoFactory.open();
+            userDao = daoFactory.getUserDao();
             userDao.insert(user);
-        } catch (DBException e) {
+        } catch (DAOException e) {
             LOG.error(Messages.ERR_CANNOT_CREATE_USER, e);
             throw new AppException(Messages.ERR_CANNOT_CREATE_USER, e);
+        } finally {
+            daoFactory.close();
         }
     }
 }

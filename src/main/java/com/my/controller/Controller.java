@@ -3,6 +3,7 @@ package com.my.controller;
 import com.my.command.Command;
 import com.my.command.CommandContainer;
 import com.my.exception.AppException;
+import com.my.util.Path;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -37,16 +38,20 @@ public class Controller extends HttpServlet {
         try {
             result = command.execute(request, response);
         } catch (AppException e) {
-            request.setAttribute("errorMessage", e.getMessage());
+            if ("GET".equals(request.getMethod())) {
+                request.setAttribute("errorMessage", e.getMessage());
+            } else {
+                result = Path.COMMAND_ERROR_PAGE + "&errorMessage=" + e.getMessage();
+            }
         }
 
         LOG.trace("Direction --> " + direction);
 
-        if (direction == Direction.FORWARD){
+        if (direction == Direction.FORWARD) {
             LOG.debug("Controller finished, now go to forward address --> " + result);
             request.getRequestDispatcher(result).forward(request, response);
         }
-        if(direction == Direction.REDIRECT){
+        if (direction == Direction.REDIRECT) {
             LOG.debug("Controller finished, now go to redirect address --> " + result);
             response.sendRedirect(result);
         }

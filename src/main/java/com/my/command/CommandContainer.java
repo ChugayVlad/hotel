@@ -1,5 +1,8 @@
 package com.my.command;
 
+import com.my.command.admin.FindRoomsCommand;
+import com.my.command.admin.SetRoomForUserCommand;
+import com.my.command.admin.ShowOrdersCommand;
 import org.apache.log4j.Logger;
 
 import java.util.Map;
@@ -14,10 +17,16 @@ public class CommandContainer {
         commands.put("login", new LoginCommand());
         commands.put("showRooms", new ShowRoomsCommand());
         commands.put("makeOrder", new CreateOrderCommand());
-        commands.put("open_registration", new OpenRegistrationCommand());
         commands.put("register", new RegisterClientCommand());
-        commands.put("successOrder", new SuccessOrderCommand());
+        commands.put("successOrder", new SuccessOrderCommand()); //<<
         commands.put("roomDescription", new RoomDescriptionCommand());
+        commands.put("openPersonalAccount", new OpenPersonalAccountCommand());
+        commands.put("bookRoom", new BookRoomCommand());
+        //commands.put("error", new ErrorCommand());
+        commands.put("logout", new LogoutCommand());
+        commands.put("showOrders", new ShowOrdersCommand());
+        commands.put("findRoomsForUser", new FindRoomsCommand());
+        commands.put("setRoom", new SetRoomForUserCommand());
 
         LOG.debug("Command container was successfully initialized");
         LOG.trace("Number of commands --> " + commands.size());

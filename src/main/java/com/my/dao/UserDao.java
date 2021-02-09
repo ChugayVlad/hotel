@@ -1,9 +1,10 @@
 package com.my.dao;
 
-import com.my.dao.Dao;
 import com.my.entity.User;
-import com.my.exception.DBException;
+import com.my.exception.DAOException;
+
+import java.sql.SQLException;
 
 public interface UserDao extends Dao<User> {
-    User getUserByEmail(String email) throws DBException;
+    User getUserByEmail(String email) throws DAOException;
 }

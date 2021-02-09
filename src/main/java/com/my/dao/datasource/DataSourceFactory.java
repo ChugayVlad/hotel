@@ -1,6 +1,6 @@
 package com.my.dao.datasource;
 
-import com.my.exception.DBException;
+import com.my.exception.DAOException;
 import com.my.exception.Messages;
 import org.apache.log4j.Logger;
 
@@ -16,7 +16,7 @@ public class DataSourceFactory {
     private static DatasourceType currentDs;
 
 
-    private DataSourceFactory(DatasourceType dsType) throws DBException {
+    private DataSourceFactory(DatasourceType dsType) throws DAOException {
         switch (dsType) {
             case MY_SQL:
                 try {
@@ -27,19 +27,19 @@ public class DataSourceFactory {
                     LOG.trace("Data source ==> " + ds);
                 } catch (NamingException ex) {
                     LOG.error(Messages.ERR_CANNOT_OBTAIN_DATA_SOURCE, ex);
-                    throw new DBException(Messages.ERR_CANNOT_OBTAIN_DATA_SOURCE, ex);
+                    throw new DAOException(Messages.ERR_CANNOT_OBTAIN_DATA_SOURCE, ex);
                 }
                 break;
             case ORACLE:
                 LOG.error("Database" + dsType + "not supported yet");
-                throw new DBException("Database " + dsType + " not supported yet");
+                throw new DAOException("Database " + dsType + " not supported yet");
 
             default:
-                throw new DBException("Database " + dsType + " not supported yet");
+                throw new DAOException("Database " + dsType + " not supported yet");
         }
     }
 
-    public static synchronized DataSourceFactory getInstance(DatasourceType dsType) throws DBException {
+    public static synchronized DataSourceFactory getInstance(DatasourceType dsType) throws DAOException {
         if (instance == null && !dsType.equals(currentDs)) {
             instance = new DataSourceFactory(dsType);
         }

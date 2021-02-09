@@ -1,5 +1,6 @@
 package com.my.command;
 
+import com.my.controller.Direction;
 import com.my.entity.Role;
 import com.my.entity.User;
 import com.my.exception.AppException;
@@ -17,6 +18,11 @@ public class RegisterClientCommand implements Command{
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
+
+        if ("GET".equals(request.getMethod())){
+            return Path.PAGE_REGISTRATION;
+        }
+
         UserService userService = new UserServiceImpl();
 
         String firstName = request.getParameter("firstName");
