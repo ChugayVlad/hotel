@@ -19,9 +19,10 @@ public class OrderDaoMySql implements OrderDao {
     private static final Logger LOG = Logger.getLogger(OrderDaoMySql.class);
     private static final String SQL_SELECT_ALL = "SELECT  * FROM orders LEFT JOIN room_types ON orders.type_id = room_types.id WHERE room_id IS NULL";
     private static final String SQL_INSERT_ORDER = "INSERT INTO orders (id, places, type_id, date_in, date_out, user_id) VALUES (DEFAULT, ?, ?, ?, ?, ?)";
-    private static final String SQL_UPDATE_ROOM = "UPDATE orders SET room_id=? WHERE id=?";
+    private static final String SQL_UPDATE_ROOM = "UPDATE orders SET room_id=?, sum=? WHERE id=?";
     private static final String SQL_GET_BY_ID = "SELECT * FROM orders LEFT JOIN room_types ON orders.type_id = room_types.id WHERE orders.id=?";
     private static final String SQL_SELECT_ALL_BY_USER = "SELECT * FROM orders  LEFT JOIN room_types ON orders.type_id = room_types.id WHERE user_id=?";
+    private static final String SQL_DELETE_BY_ID = "DELETE FROM orders WHERE id=?";
 
     private Connection con;
 
@@ -50,8 +51,18 @@ public class OrderDaoMySql implements OrderDao {
     }
 
     @Override
-    public void delete(Long id) {
-
+    public void delete(Long id) throws DAOException {
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = con.prepareStatement(SQL_DELETE_BY_ID);
+            pstmt.setLong(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Cannot delete order", e);
+            throw new DAOException("Cannot delete order", e);
+        } finally {
+            closeStatement(pstmt);
+        }
     }
 
     @Override
@@ -60,7 +71,8 @@ public class OrderDaoMySql implements OrderDao {
         try {
             pstmt = con.prepareStatement(SQL_UPDATE_ROOM);
             pstmt.setLong(1, order.getRoomId());
-            pstmt.setLong(2, order.getId());
+            pstmt.setDouble(2, order.getSum());
+            pstmt.setLong(3, order.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             LOG.error("Cannot update order", e);
@@ -143,6 +155,7 @@ public class OrderDaoMySql implements OrderDao {
         order.setDateIn(rs.getDate("date_in"));
         order.setDateOut(rs.getDate("date_out"));
         order.setPlaces(rs.getInt("places"));
+        order.setSum(rs.getDouble("sum"));
         RoomType type = new RoomType();
         type.setName(rs.getString("room_types.name"));
         type.setId(rs.getLong("type_id"));

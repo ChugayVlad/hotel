@@ -1,10 +1,14 @@
 package com.my.entity;
 
+import java.sql.Date;
+
 public class Bill extends Entity{
     private Double sum;
     private Long userId;
     private Long roomId;
-    BillStatus status;
+    private Date dateIn;
+    private Date dateOut;
+    private BillStatus status;
 
     public Double getSum() {
         return sum;
@@ -38,12 +42,30 @@ public class Bill extends Entity{
         this.status = status;
     }
 
+    public Date getDateIn() {
+        return dateIn;
+    }
+
+    public void setDateIn(Date dateIn) {
+        this.dateIn = dateIn;
+    }
+
+    public Date getDateOut() {
+        return dateOut;
+    }
+
+    public void setDateOut(Date dateOut) {
+        this.dateOut = dateOut;
+    }
+
     @Override
     public String toString() {
         return "Bill{" +
                 "sum=" + sum +
                 ", userId=" + userId +
                 ", roomId=" + roomId +
+                ", dateIn=" + dateIn +
+                ", dateOut=" + dateOut +
                 ", status=" + status +
                 '}';
     }

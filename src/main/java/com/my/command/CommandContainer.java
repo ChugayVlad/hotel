@@ -22,11 +22,13 @@ public class CommandContainer {
         commands.put("roomDescription", new RoomDescriptionCommand());
         commands.put("openPersonalAccount", new OpenPersonalAccountCommand());
         commands.put("bookRoom", new BookRoomCommand());
-        //commands.put("error", new ErrorCommand());
+        commands.put("error", new ErrorCommand());
         commands.put("logout", new LogoutCommand());
         commands.put("showOrders", new ShowOrdersCommand());
         commands.put("findRoomsForUser", new FindRoomsCommand());
         commands.put("setRoom", new SetRoomForUserCommand());
+        commands.put("pay", new PayCommand());
+        commands.put("cancelOrder", new CancelOrderCommand());
 
         LOG.debug("Command container was successfully initialized");
         LOG.trace("Number of commands --> " + commands.size());

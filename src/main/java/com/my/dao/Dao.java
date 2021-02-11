@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface Dao<T extends Entity> {
     void insert(T entity) throws DAOException;
-    void delete(Long id);
+    void delete(Long id) throws DAOException;
     T get(Long id) throws DAOException;
     void update(T entity) throws DAOException;
     List<T> getAll() throws DAOException;

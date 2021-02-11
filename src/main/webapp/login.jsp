@@ -21,11 +21,11 @@
 
                 <fieldset >
                     <legend>Email</legend>
-                    <input name="email"/><br/>
+                    <input required name="email"/><br/>
                 </fieldset><br/>
                 <fieldset>
                     <legend>Password</legend>
-                    <input type="password" name="password"/>
+                    <input required type="password" name="password"/>
                 </fieldset><br/>
                 <input type="submit" value="Login">
             </form>

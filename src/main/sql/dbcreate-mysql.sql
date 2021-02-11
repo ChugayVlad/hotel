@@ -41,7 +41,7 @@ INSERT INTO room_types VALUES(4, 'Business deluxe');
 CREATE TABLE rooms(
 	id INTEGER NOT NULL auto_increment PRIMARY KEY,
     places INTEGER NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
+    price DOUBLE NOT NULL,
 	status VARCHAR(20) NOT NULL,
 	type_id INTEGER NOT NULL,
     FOREIGN KEY (type_id) REFERENCES room_types(id)
@@ -71,6 +71,7 @@ CREATE TABLE orders (
 	date_out DATE NOT NULL,
     user_id INTEGER NOT NULL,
     room_id INTEGER,
+    sum DOUBLE,
 
     FOREIGN KEY (room_id) REFERENCES rooms(id),
     FOREIGN KEY (type_id) REFERENCES room_types(id),
@@ -79,10 +80,12 @@ CREATE TABLE orders (
 
 CREATE TABLE bills(
     id INTEGER NOT NULL auto_increment PRIMARY KEY,
-    sum DECIMAL(10,2) NOT NULL,
+    sum DOUBLE NOT NULL,
     user_id INTEGER NOT NULL,
     room_id INTEGER NOT NULL,
     status VARCHAR(20) NOT NULL,
+	date_in DATE NOT NULL,
+	date_out DATE NOT NULL,
 
     FOREIGN KEY (room_id) REFERENCES rooms(id),
     FOREIGN KEY (user_id) REFERENCES users(id)

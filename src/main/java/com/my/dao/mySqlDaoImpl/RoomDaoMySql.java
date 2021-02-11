@@ -9,6 +9,7 @@ import com.my.exception.DAOException;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,10 +23,11 @@ public class RoomDaoMySql implements RoomDao {
     private static final String SQL_SELECT_ALL = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id";
     private static final String SQL_UPDATE_STATUS = "UPDATE rooms SET status = ? WHERE id=?";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id WHERE rooms.id=?";
-    private static final String SQL_SELECT_ALL_BY_PARAMETERS = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id WHERE type_id=? AND places=? AND status = 'VACANT'";
+    private static final String SQL_SELECT_ALL_BY_PARAMETERS = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id WHERE type_id=? AND places=? ";
 
 
     private Connection con;
+
     public RoomDaoMySql(Connection con) {
         this.con = con;
     }
@@ -54,7 +56,7 @@ public class RoomDaoMySql implements RoomDao {
             pstmt = con.prepareStatement(SQL_SELECT_BY_ID);
             pstmt.setLong(1, id);
             rs = pstmt.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 room = extractRoom(rs);
             }
         } catch (SQLException e) {
@@ -102,14 +104,16 @@ public class RoomDaoMySql implements RoomDao {
     }
 
     @Override
-    public List<Room> findRoomsByParameters(Integer places, Integer typeId) throws DAOException {
+    public List<Room> findRoomsByParameters(Integer places, Long typeId, Date dateIn, Date dateOut) throws DAOException {
         List<Room> rooms = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
             pstmt = con.prepareStatement(SQL_SELECT_ALL_BY_PARAMETERS);
             pstmt.setLong(1, typeId);
-            pstmt.setLong(2, places);
+            pstmt.setInt(2, places);
+           // pstmt.setDate(3, dateIn);
+            //pstmt.setDate(4, dateOut);
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 rooms.add(extractRoom(rs));

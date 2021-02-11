@@ -8,7 +8,9 @@ import java.util.List;
 public interface OrderService {
     void insertOrder(Order order) throws ServiceException;
     List<Order> getAllOrders() throws ServiceException;
-    void setRoom(Order order) throws ServiceException;
     Order getById(Long orderId) throws ServiceException;
     List<Order> getAllOrdersByUser(Long id) throws ServiceException;
+    void delete(Long id) throws ServiceException;
+
+    void setRoom(Long orderId, Long roomId) throws ServiceException;
 }

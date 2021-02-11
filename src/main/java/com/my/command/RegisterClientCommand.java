@@ -18,6 +18,7 @@ public class RegisterClientCommand implements Command{
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
+        LOG.debug("Command starts");
 
         if ("GET".equals(request.getMethod())){
             return Path.PAGE_REGISTRATION;

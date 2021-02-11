@@ -21,8 +21,9 @@ public class RoomDescriptionCommand implements Command{
         LOG.trace("Room id-->" + roomId);
         request.setAttribute("roomId", roomId);
 
-        LOG.debug("Command finished");
+        request.setAttribute("roomStatus", request.getParameter("roomStatus"));
 
+        LOG.debug("Command finished");
         return Path.PAGE_ROOM_DESCRIPTION;
     }
 }

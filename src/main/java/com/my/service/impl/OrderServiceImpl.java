@@ -5,6 +5,7 @@ import com.my.dao.datasource.DatasourceType;
 import com.my.dao.factory.DaoFactory;
 import com.my.dao.OrderDao;
 import com.my.entity.Order;
+import com.my.entity.Room;
 import com.my.entity.RoomStatus;
 import com.my.exception.AppException;
 import com.my.exception.DAOException;
@@ -12,6 +13,8 @@ import com.my.exception.ServiceException;
 import com.my.service.OrderService;
 import org.apache.log4j.Logger;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
@@ -59,13 +62,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void setRoom(Order order) throws ServiceException {
+    public void setRoom(Long orderId, Long roomId) throws ServiceException {
         try {
             daoFactory.beginTransaction();
             OrderDao orderDao = daoFactory.getOrderDao();
             RoomDao roomDao = daoFactory.getRoomDao();
+            Room room = roomDao.get(roomId);
+            Order order = orderDao.get(orderId);
+
+            long daysStay = ChronoUnit.DAYS.between(order.getDateIn().toLocalDate(), order.getDateOut().toLocalDate());
+            Double sum = daysStay*room.getPrice();
+
+            order.setRoomId(roomId);
+            order.setSum(sum);
             orderDao.update(order);
-            roomDao.updateStatus(RoomStatus.NOT_AVAILABLE, order.getRoomId());
             daoFactory.commitTransaction();
         } catch (DAOException e) {
             daoFactory.rollbackTransaction();
@@ -106,5 +116,19 @@ public class OrderServiceImpl implements OrderService {
             daoFactory.close();
         }
         return orders;
+    }
+
+    @Override
+    public void delete(Long id) throws ServiceException {
+        try {
+            daoFactory.open();
+            OrderDao orderDao = daoFactory.getOrderDao();
+            orderDao.delete(id);
+        } catch (DAOException e) {
+            LOG.error("Can not delete order", e);
+            throw new ServiceException("Can not delete order", e);
+        } finally {
+            daoFactory.close();
+        }
     }
 }

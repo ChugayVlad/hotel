@@ -19,12 +19,12 @@
 
     <fieldset>
         <legend>Date in</legend>
-        <input type="date" name="dateIn">
+        <input required type="date" name="dateIn">
     </fieldset>
 
     <fieldset>
         <legend>Date out</legend>
-        <input type="date" name="dateOut">
+        <input required type="date" name="dateOut">
     </fieldset>
 
     <fieldset>
@@ -63,13 +63,13 @@
     <tbody>
     <c:forEach var="room" items="${rooms}">
         <tr>
-            <td><c:out value="${room.type}"/></td>
+            <td>"${room.type}</td>
 
-            <td><c:out value="${room.places}"/></td>
-            <td><c:out value="${room.price}"/></td>
-            <td><c:out value="${room.status}"/></td>
+            <td>${room.places}</td>
+            <td>${room.price}</td>
+            <td>${room.status}</td>
             <td>
-                <a href="controller?command=roomDescription&roomId=${room.id}">Select room</a>
+                <a href="controller?command=roomDescription&roomId=${room.id}&roomStatus=${room.status}">Select room</a>
             </td>
         </tr>
     </c:forEach>

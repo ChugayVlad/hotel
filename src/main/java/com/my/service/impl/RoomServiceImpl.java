@@ -10,6 +10,7 @@ import com.my.exception.ServiceException;
 import com.my.service.RoomService;
 import org.apache.log4j.Logger;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -45,12 +46,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> getAllRoomsByParameters(Integer places, Integer typeId) throws ServiceException {
+    public List<Room> getAllRoomsByParameters(Integer places, Long typeId, Date dateIn, Date dateOut) throws ServiceException {
         List<Room> rooms;
         try {
             daoFactory.open();
             RoomDao roomDao = daoFactory.getRoomDao();
-            rooms = roomDao.findRoomsByParameters(places, typeId);
+            rooms = roomDao.findRoomsByParameters(places, typeId, dateIn, dateOut);
         } catch (DAOException e) {
             LOG.error("Can not find rooms by parameters", e);
             throw new ServiceException("Can not find rooms by parameters");

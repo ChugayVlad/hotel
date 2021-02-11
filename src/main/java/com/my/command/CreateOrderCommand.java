@@ -26,11 +26,24 @@ public class CreateOrderCommand implements Command {
         LOG.debug("Command starts");
         HttpSession session = request.getSession();
 
+        if (session.getAttribute("user") == null){
+            return Path.COMMAND_LOGIN;
+        }
+
         OrderService orderService;
         Order order = new Order();
         order.setPlaces(Integer.parseInt(request.getParameter("places")));
-        order.setDateIn(Date.valueOf(LocalDate.parse(request.getParameter("dateIn"))));
-        order.setDateOut(Date.valueOf(LocalDate.parse(request.getParameter("dateOut"))));
+        LocalDate dateIn = LocalDate.parse(request.getParameter("dateIn"));
+        LocalDate dateOut = LocalDate.parse(request.getParameter("dateOut"));
+
+
+        LOG.trace(dateIn);
+        if (dateIn.compareTo(dateOut) > 0) {
+            throw new AppException("Arrival date cannot be less than departure date");
+        }
+
+        order.setDateIn(Date.valueOf(dateIn.plusDays(1)));
+        order.setDateOut(Date.valueOf(dateOut.plusDays(1)));
 
         RoomTypeService typeService = new RoomTypeServiceImpl();
         RoomType type = typeService.getById(Integer.parseInt(request.getParameter("roomType")));

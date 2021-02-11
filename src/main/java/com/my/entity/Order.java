@@ -10,6 +10,7 @@ public class Order extends Entity {
     private RoomType type;
     private Long userId;
     private Long roomId;
+    private Double sum;
 
     public Integer getPlaces() {
         return places;
@@ -59,6 +60,14 @@ public class Order extends Entity {
         this.roomId = roomId;
     }
 
+    public Double getSum() {
+        return sum;
+    }
+
+    public void setSum(Double sum) {
+        this.sum = sum;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -68,6 +77,7 @@ public class Order extends Entity {
                 ", type=" + type +
                 ", userId=" + userId +
                 ", roomId=" + roomId +
+                ", sum=" + sum +
                 '}';
     }
 }

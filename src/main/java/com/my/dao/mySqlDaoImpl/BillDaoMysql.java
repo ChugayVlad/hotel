@@ -3,23 +3,24 @@ package com.my.dao.mySqlDaoImpl;
 import com.my.dao.BillDao;
 import com.my.entity.Bill;
 import com.my.entity.BillStatus;
-import com.my.entity.Room;
-import com.my.entity.RoomStatus;
 import com.my.exception.DAOException;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BillDaoMysql implements BillDao {
     private static final Logger LOG = Logger.getLogger(BillDaoMysql.class);
-    private static final String SQL_INSERT_BILL = "INSERT INTO bills (id, sum, user_id, room_id, status) VALUES (DEFAULT, ?, ?, ?, ?)";
+    private static final String SQL_INSERT_BILL = "INSERT INTO bills (id, sum, user_id, room_id, date_in, date_out, status) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_SELECT_ALL_BY_USER = "SELECT * FROM bills WHERE user_id=?";
+    private static final String SQL_SELECT_BY_ID = "SELECT * FROM bills WHERE id=?";
+    private static final String SQL_UPDATE_STATUS = "UPDATE bills SET status = ? WHERE id=?";
+    private static final String SQL_SELECT_ALL_BY_DATE = "SELECT * FROM bills WHERE room_id = ? AND ? BETWEEN date_in AND date_out OR ? BETWEEN date_in AND date_out";
     private Connection con;
 
     public BillDaoMysql(Connection con) {
@@ -35,6 +36,8 @@ public class BillDaoMysql implements BillDao {
             stmt.setDouble(++k, bill.getSum());
             stmt.setLong(++k, bill.getUserId());
             stmt.setLong(++k, bill.getRoomId());
+            stmt.setDate(++k, bill.getDateIn());
+            stmt.setDate(++k, bill.getDateOut());
             stmt.setString(++k, String.valueOf(bill.getStatus()));
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -51,13 +54,38 @@ public class BillDaoMysql implements BillDao {
     }
 
     @Override
-    public Bill get(Long id) {
-        return null;
+    public Bill get(Long id) throws DAOException {
+        Bill bill = new Bill();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = con.prepareStatement(SQL_SELECT_BY_ID);
+            pstmt.setLong(1, id);
+            rs = pstmt.executeQuery();
+            if(rs.next()){
+                bill = extractBill(rs);
+            }
+        } catch (SQLException e) {
+            LOG.error("Cannot get bill by id", e);
+            throw new DAOException("Cannot get bill by id", e);
+        }
+        return bill;
     }
 
     @Override
-    public void update(Bill entity) {
-
+    public void update(Bill bill) throws DAOException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = con.prepareStatement(SQL_UPDATE_STATUS);
+            stmt.setString(1, String.valueOf(bill.getStatus()));
+            stmt.setString(2, String.valueOf(bill.getId()));
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Cannot update bill status", e);
+            throw new DAOException("Cannot update bill status", e);
+        } finally {
+            closeStatement(stmt);
+        }
     }
 
     @Override
@@ -82,6 +110,30 @@ public class BillDaoMysql implements BillDao {
         return null;
     }
 
+    @Override
+    public List<Bill> getAllByDate(Long roomId, Date dateIn, Date dateOut) throws DAOException {
+        List<Bill> bills = new ArrayList<>();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = con.prepareStatement(SQL_SELECT_ALL_BY_DATE);
+            pstmt.setLong(1, roomId);
+            pstmt.setDate(2, dateIn);
+            pstmt.setDate(3, dateOut);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                bills.add(extractBill(rs));
+            }
+        } catch (SQLException e) {
+            LOG.error("Cannot get bills by date", e);
+            throw new DAOException("Cannot get bills by date", e);
+        } finally {
+            closeResultSet(rs);
+            closeStatement(pstmt);
+        }
+        return bills;
+    }
+    
 
     public List<Bill> getAllByUserId(Long id) throws DAOException {
         List<Bill> bills = new ArrayList<>();
@@ -110,6 +162,8 @@ public class BillDaoMysql implements BillDao {
         bill.setSum(rs.getDouble("sum"));
         bill.setUserId(rs.getLong("user_id"));
         bill.setRoomId(rs.getLong("room_id"));
+        bill.setDateIn(rs.getDate("date_in"));
+        bill.setDateOut(rs.getDate("date_out"));
         bill.setStatus(BillStatus.valueOf(rs.getString("status")));
         return bill;
     }

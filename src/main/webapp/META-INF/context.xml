@@ -8,9 +8,7 @@
               username="testuser"
               password="testpass"
               driverClassName="com.mysql.cj.jdbc.Driver"
-
               defaultTransactionIsolation="READ_COMMITTED"
-
               connectionProperties="useUnicode=yes;characterEncoding=utf8;serverTimezone=UTC;"
               url="jdbc:mysql://localhost:3306/hoteldb"/>
 </Context>

@@ -36,7 +36,7 @@
             <td><c:out value="${order.userId}"/></td>
             <td><c:out value="${order.roomId}"/></td>
             <td>
-                <a href="controller?command=findRoomsForUser&places=${order.places}&typeId=${order.type.id}&orderId=${order.id}">Find rooms for user</a>
+                <a href="controller?command=findRoomsForUser&orderId=${order.id}">Find rooms for user</a>
             </td>
         </tr>
     </c:forEach>

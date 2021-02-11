@@ -24,10 +24,11 @@ public class SetRoomForUserCommand implements Command {
             throw new AppException("You dont have permissions!!!");
         }
 
-        OrderService orderService = new OrderServiceImpl();
+        OrderService orderService = new OrderServiceImpl();/*
         Order order = orderService.getById(Long.valueOf(request.getParameter("orderId")));
-        order.setRoomId(Long.valueOf(request.getParameter("roomId")));
-        orderService.setRoom(order);
+        order.setRoomId(Long.valueOf(request.getParameter("roomId")));*/
+
+        orderService.setRoom(Long.valueOf(request.getParameter("orderId")), Long.valueOf(request.getParameter("roomId")));
 
         request.setAttribute("message", "Request sent to user");
 

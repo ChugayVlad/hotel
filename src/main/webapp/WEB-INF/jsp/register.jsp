@@ -15,13 +15,13 @@
 <form id="registration_form" action="controller" method="post">
     <input type="hidden" name="command" value="register"/>
     Email
-    <input type="email" name="email" /><br/>
+    <input required type="email" name="email" /><br/>
     Password
-    <input type="password" name="password"  /><br/>
+    <input required type="password" name="password"  /><br/>
     First name
-    <input type="text" name="firstName" /><br/>
+    <input required type="text" name="firstName" /><br/>
     Last name
-    <input type="text" name="lastName" /><br/>
+    <input required type="text" name="lastName" /><br/>
     <input type="submit" value="Register"/>
 </form>
 </body>

@@ -18,6 +18,10 @@ ROOM DESCRIPTION
     <c:out value="${roomId}"/>
     <input type="hidden" name="command" value="bookRoom"/>
     <input type="hidden" name="roomId" value="${roomId}">
+    Date in
+    <input required type="date" name="dateIn">
+    Date out
+    <input required type="date" name="dateOut">
     <input type="submit" value="Book">
 </form>
 </body>
