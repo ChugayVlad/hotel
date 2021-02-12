@@ -14,60 +14,57 @@
 <body>
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 <c:if test="${user.roleId ne 0}">
-<form id="order" action="controller" method="post">
-    <input type="hidden" name="command" value="makeOrder"/>
+    <form id="order" action="controller" method="post">
+        <input type="hidden" name="command" value="makeOrder"/>
 
-    <fieldset>
-        <legend>Date in</legend>
-        <input required type="date" name="dateIn">
-    </fieldset>
+        <fieldset>
+            <legend>Date in</legend>
+            <input required type="date" name="dateIn">
+        </fieldset>
 
-    <fieldset>
-        <legend>Date out</legend>
-        <input required type="date" name="dateOut">
-    </fieldset>
+        <fieldset>
+            <legend>Date out</legend>
+            <input required type="date" name="dateOut">
+        </fieldset>
 
-    <fieldset>
-        <legend>Places</legend>
-        <select name="places">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-        </select>
-    </fieldset>
+        <fieldset>
+            <legend>Places</legend>
+            <select name="places">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+            </select>
+        </fieldset>
 
-    <fieldset>
-        <legend>Room type</legend>
-        <select name="roomType">
-            <c:forEach var="type" items="${types}">
-                <option value="${type.id}"><c:out value="${type.name}"/></option>
-            </c:forEach>
-        </select>
-    </fieldset>
-    <input type="submit" value="Make order">
-</form>
+        <fieldset>
+            <legend>Room type</legend>
+            <select name="roomType">
+                <c:forEach var="type" items="${types}">
+                    <option value="${type.id}"><c:out value="${type.name}"/></option>
+                </c:forEach>
+            </select>
+        </fieldset>
+        <input type="submit" value="Make order">
+    </form>
 </c:if>
 
 <table id="rooms-list">
 
     <thead>
     <tr>
-        <th scope="col">Type</th>
-        <th scope="col">Places</th>
-        <th scope="col">Price</th>
-        <th scope="col">Status</th>
-        <th scope="col">BUTTON</th>
+        <th scope="col"><a href="controller?command=showRooms&sortBy=sortType">Type</a></th>
+        <th scope="col"><a href="controller?command=showRooms&sortBy=sortPlaces">Places</a></th>
+        <th scope="col"><a href="controller?command=showRooms&sortBy=sortPrice">Price</a></th>
     </tr>
     </thead>
     <tbody>
     <c:forEach var="room" items="${rooms}">
         <tr>
-            <td>"${room.type}</td>
+            <td>${room.type}</td>
 
             <td>${room.places}</td>
             <td>${room.price}</td>
-            <td>${room.status}</td>
             <td>
                 <a href="controller?command=roomDescription&roomId=${room.id}&roomStatus=${room.status}">Select room</a>
             </td>

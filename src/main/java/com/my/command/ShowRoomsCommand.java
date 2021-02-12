@@ -8,6 +8,7 @@ import com.my.service.impl.RoomServiceImpl;
 import com.my.service.RoomTypeService;
 import com.my.service.impl.RoomTypeServiceImpl;
 import com.my.util.Path;
+import com.my.util.Sort;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,9 @@ public class ShowRoomsCommand implements Command{
         LOG.debug("Command starts");
         RoomService roomService = new RoomServiceImpl();
         List<Room> rooms = roomService.getAllRooms();
+        String sortBy = request.getParameter("sortBy");
+        Sort.sort(sortBy, rooms);
+
         LOG.trace("Rooms --> " + rooms);
 
         request.setAttribute("rooms", rooms);

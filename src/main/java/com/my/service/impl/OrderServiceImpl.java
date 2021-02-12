@@ -13,6 +13,7 @@ import com.my.exception.ServiceException;
 import com.my.service.OrderService;
 import org.apache.log4j.Logger;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -33,6 +34,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void insertOrder(Order order) throws ServiceException {
         OrderDao orderDao;
+        LocalDate currentDate = LocalDate.now();
+        if (order.getDateIn().compareTo(Date.valueOf(currentDate)) < 0 || order.getDateOut().compareTo(Date.valueOf(currentDate)) < 0){
+            throw new ServiceException("Date cannot be past!");
+        }
         try {
             daoFactory.open();
             orderDao = daoFactory.getOrderDao();

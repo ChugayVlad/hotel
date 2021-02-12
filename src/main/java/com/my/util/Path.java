@@ -13,7 +13,7 @@ public final class Path {
     public static final String PAGE_AVAILABLE_ROOMS = "/WEB-INF/jsp/admin/available_rooms.jsp";
 
     public static final String COMMAND_ERROR_PAGE = "controller?command=error";
-    public static final String COMMAND_SHOW_ROOMS = "controller?command=showRooms";
+    public static final String COMMAND_SHOW_ROOMS = "controller?command=showRooms&sortBy=sortPrice";
     public static final String COMMAND_OPEN_SUCCESS = "controller?command=successOrder";
     public static final String COMMAND_OPEN_PERSONAL_ACCOUNT = "controller?command=openPersonalAccount";
     public static final String COMMAND_LOGIN = "controller?command=login";

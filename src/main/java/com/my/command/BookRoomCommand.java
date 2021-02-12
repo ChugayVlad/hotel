@@ -48,14 +48,10 @@ public class BookRoomCommand implements Command {
         bill.setRoomId(roomId);
         bill.setUserId(user.getId());
         bill.setStatus(BillStatus.NOT_PAID);
-        bill.setDateIn(Date.valueOf(dateIn.plusDays(1)));
-        bill.setDateOut(Date.valueOf(dateOut.plusDays(1)));
+        bill.setDateIn(Date.valueOf(dateIn));
+        bill.setDateOut(Date.valueOf(dateOut));
 
         Room room = roomService.getRoomById(roomId);
-
-        //Double sum = Double.parseDouble(request.getParameter("sum"));
-
-        //bill.setSum(sum);
 
         if (request.getParameter("orderId") != null) {
             Long orderId = Long.parseLong(request.getParameter("orderId"));

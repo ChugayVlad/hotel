@@ -42,14 +42,13 @@ public class CreateOrderCommand implements Command {
             throw new AppException("Arrival date cannot be less than departure date");
         }
 
-        order.setDateIn(Date.valueOf(dateIn.plusDays(1)));
-        order.setDateOut(Date.valueOf(dateOut.plusDays(1)));
+        order.setDateIn(Date.valueOf(dateIn));
+        order.setDateOut(Date.valueOf(dateOut));
 
         RoomTypeService typeService = new RoomTypeServiceImpl();
         RoomType type = typeService.getById(Integer.parseInt(request.getParameter("roomType")));
 
         order.setType(type);
-        //order.setRoom();
 
         User user = (User) session.getAttribute("user");
         order.setUserId(user.getId());

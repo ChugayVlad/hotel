@@ -14,6 +14,8 @@ import com.my.exception.ServiceException;
 import com.my.service.BillService;
 import org.apache.log4j.Logger;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +37,22 @@ public class BillServiceImpl implements BillService {
     public void insertBill(Bill bill) throws ServiceException {
         BillDao billDao;
         RoomDao roomDao;
+
+        LocalDate currentDate = LocalDate.now();
+        if (bill.getDateIn().compareTo(Date.valueOf(currentDate)) < 0 || bill.getDateOut().compareTo(Date.valueOf(currentDate)) < 0){
+            throw new ServiceException("Date cannot be past!");
+        }
+
         try {
             daoFactory.beginTransaction();
             billDao = daoFactory.getBillDao();
-            if(!billDao.getAllByDate(bill.getRoomId(), bill.getDateIn(), bill.getDateOut()).isEmpty()){
+            List<Bill> bills = billDao.getAllByDate(bill.getRoomId(), bill.getDateIn(), bill.getDateOut());
+
+            if(!bills.isEmpty()){
                 throw new ServiceException("Sorry, room is busy for these dates");
             }
+
+
             roomDao = daoFactory.getRoomDao();
             Room room = roomDao.get(bill.getRoomId());
 
@@ -81,6 +93,7 @@ public class BillServiceImpl implements BillService {
         try {
             daoFactory.beginTransaction();
             BillDao billDao = daoFactory.getBillDao();
+
             RoomDao roomDao = daoFactory.getRoomDao();
             OrderDao orderDao = daoFactory.getOrderDao();
             billDao.insert(bill);

@@ -23,7 +23,7 @@ public class RoomDaoMySql implements RoomDao {
     private static final String SQL_SELECT_ALL = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id";
     private static final String SQL_UPDATE_STATUS = "UPDATE rooms SET status = ? WHERE id=?";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id WHERE rooms.id=?";
-    private static final String SQL_SELECT_ALL_BY_PARAMETERS = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id WHERE type_id=? AND places=? ";
+    private static final String SQL_SELECT_ALL_BY_PARAMETERS = "select * from rooms r LEFT JOIN room_types on r.type_id = room_types.id where r.type_id=? AND r.places=? AND r.id not in (select b.room_id from bills b where ? BETWEEN b.date_in AND b.date_out OR ? BETWEEN b.date_in AND b.date_out)";
 
 
     private Connection con;
@@ -112,8 +112,8 @@ public class RoomDaoMySql implements RoomDao {
             pstmt = con.prepareStatement(SQL_SELECT_ALL_BY_PARAMETERS);
             pstmt.setLong(1, typeId);
             pstmt.setInt(2, places);
-           // pstmt.setDate(3, dateIn);
-            //pstmt.setDate(4, dateOut);
+            pstmt.setDate(3, dateIn);
+            pstmt.setDate(4, dateOut);
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 rooms.add(extractRoom(rs));

@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class OrderDaoMySql implements OrderDao {
@@ -38,8 +39,8 @@ public class OrderDaoMySql implements OrderDao {
             int k = 0;
             stmt.setInt(++k, order.getPlaces());
             stmt.setLong(++k, order.getType().getId());
-            stmt.setObject(++k, order.getDateIn());
-            stmt.setObject(++k, order.getDateOut());
+            stmt.setDate(++k, order.getDateIn(), Calendar.getInstance());
+            stmt.setDate(++k, order.getDateOut(), Calendar.getInstance());
             stmt.setLong(++k, order.getUserId());
             stmt.executeUpdate();
         } catch (SQLException e) {

@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class BillDaoMysql implements BillDao {
@@ -20,7 +21,7 @@ public class BillDaoMysql implements BillDao {
     private static final String SQL_SELECT_ALL_BY_USER = "SELECT * FROM bills WHERE user_id=?";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM bills WHERE id=?";
     private static final String SQL_UPDATE_STATUS = "UPDATE bills SET status = ? WHERE id=?";
-    private static final String SQL_SELECT_ALL_BY_DATE = "SELECT * FROM bills WHERE room_id = ? AND ? BETWEEN date_in AND date_out OR ? BETWEEN date_in AND date_out";
+    private static final String SQL_SELECT_ALL_BY_DATE = "select * from bills a where a.room_id=? and a.room_id in (select b.room_id from bills b where ? BETWEEN b.date_in AND b.date_out OR ? BETWEEN b.date_in AND b.date_out)";
     private Connection con;
 
     public BillDaoMysql(Connection con) {
@@ -36,8 +37,8 @@ public class BillDaoMysql implements BillDao {
             stmt.setDouble(++k, bill.getSum());
             stmt.setLong(++k, bill.getUserId());
             stmt.setLong(++k, bill.getRoomId());
-            stmt.setDate(++k, bill.getDateIn());
-            stmt.setDate(++k, bill.getDateOut());
+            stmt.setDate(++k, bill.getDateIn(), Calendar.getInstance());
+            stmt.setDate(++k, bill.getDateOut(), Calendar.getInstance());
             stmt.setString(++k, String.valueOf(bill.getStatus()));
             stmt.executeUpdate();
         } catch (SQLException e) {
