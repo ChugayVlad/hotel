@@ -7,6 +7,7 @@
 --%>
 <%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
+<%@ taglib prefix="util" tagdir="/WEB-INF/tags" %>
 <html>
 <head>
     <title>Title</title>
@@ -53,9 +54,9 @@
 
     <thead>
     <tr>
-        <th scope="col"><a href="controller?command=showRooms&sortBy=sortType">Type</a></th>
-        <th scope="col"><a href="controller?command=showRooms&sortBy=sortPlaces">Places</a></th>
-        <th scope="col"><a href="controller?command=showRooms&sortBy=sortPrice">Price</a></th>
+        <th scope="col"><a href="controller?command=showRooms&sortBy=type_id&pageSize=${pageSize}&page=${page}">Type</a></th>
+        <th scope="col"><a href="controller?command=showRooms&sortBy=places&pageSize=${pageSize}&page=${page}">Places</a></th>
+        <th scope="col"><a href="controller?command=showRooms&sortBy=price&pageSize=${pageSize}&page=${page}">Price</a></th>
     </tr>
     </thead>
     <tbody>
@@ -70,7 +71,11 @@
             </td>
         </tr>
     </c:forEach>
+
+
+
     </tbody>
 </table>
+<util:pagination path="controller?command=showRooms" page="${page}" pageSize="${pageSize}" maxPage="${maxPage}"/>
 </body>
 </html>

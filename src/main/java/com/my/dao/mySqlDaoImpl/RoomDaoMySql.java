@@ -6,6 +6,7 @@ import com.my.entity.Room;
 import com.my.entity.RoomStatus;
 import com.my.entity.RoomType;
 import com.my.exception.DAOException;
+import com.sun.org.apache.bcel.internal.generic.RET;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -20,10 +21,11 @@ import java.util.List;
 public class RoomDaoMySql implements RoomDao {
     private static final Logger LOG = Logger.getLogger(RoomDaoMySql.class);
 
-    private static final String SQL_SELECT_ALL = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id";
+    private static final String SQL_SELECT_ALL = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id ORDER BY %s LIMIT ? OFFSET ?";
     private static final String SQL_UPDATE_STATUS = "UPDATE rooms SET status = ? WHERE id=?";
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id WHERE rooms.id=?";
     private static final String SQL_SELECT_ALL_BY_PARAMETERS = "select * from rooms r LEFT JOIN room_types on r.type_id = room_types.id where r.type_id=? AND r.places=? AND r.id not in (select b.room_id from bills b where ? BETWEEN b.date_in AND b.date_out OR ? BETWEEN b.date_in AND b.date_out)";
+    private static final String SQL_ROOMS_COUNT = "SELECT COUNT(*) FROM rooms";
 
 
     private Connection con;
@@ -68,12 +70,23 @@ public class RoomDaoMySql implements RoomDao {
 
     @Override
     public List<Room> getAll() throws DAOException {
+        return null;
+    }
+
+    @Override
+    public List<Room> getAll(int page, int pageSize, String order) throws DAOException {
         List<Room> rooms = new ArrayList<>();
-        Statement stmt = null;
+        PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(SQL_SELECT_ALL);
+            String sql = String.format(SQL_SELECT_ALL, order);
+
+            pstmt = con.prepareStatement(sql);
+            LOG.trace("Order by -->> " + order);
+            pstmt.setInt(1, pageSize);
+            pstmt.setInt(2, pageSize * (page - 1));
+
+            rs = pstmt.executeQuery();
             while (rs.next()) {
                 rooms.add(extractRoom(rs));
             }
@@ -82,7 +95,7 @@ public class RoomDaoMySql implements RoomDao {
             throw new DAOException("Cannot get all rooms", e);
         } finally {
             closeResultSet(rs);
-            closeStatement(stmt);
+            closeStatement(pstmt);
         }
         return rooms;
     }
@@ -126,6 +139,24 @@ public class RoomDaoMySql implements RoomDao {
             closeStatement(pstmt);
         }
         return rooms;
+    }
+
+    @Override
+    public int getRoomsNumber() throws DAOException {
+        int roomsNumber = 0;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = con.createStatement();
+            rs = stmt.executeQuery(SQL_ROOMS_COUNT);
+            if (rs.next()){
+                roomsNumber = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            LOG.error("Cannot get rooms number", e);
+            throw new DAOException("Cannot get rooms number", e);
+        }
+        return roomsNumber;
     }
 
     private Room extractRoom(ResultSet rs) throws SQLException {

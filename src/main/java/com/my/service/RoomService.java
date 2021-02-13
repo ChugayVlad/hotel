@@ -9,7 +9,8 @@ import java.sql.Date;
 import java.util.List;
 
 public interface RoomService {
-    List<Room> getAllRooms() throws ServiceException;
+    List<Room> getAllRooms(int page, int pageSize, String order) throws ServiceException;
     List<Room> getAllRoomsByParameters(Integer places, Long typeId, Date dateIn, Date dateOut) throws ServiceException;
     Room getRoomById(Long id) throws ServiceException;
+    int getRoomsCount() throws ServiceException;
 }

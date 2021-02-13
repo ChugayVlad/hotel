@@ -22,17 +22,35 @@ public class ShowRoomsCommand implements Command{
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
         RoomService roomService = new RoomServiceImpl();
-        List<Room> rooms = roomService.getAllRooms();
+
+        String paramPage = request.getParameter("page");
+        String paramPageSize = request.getParameter("pageSize");
+        int page = Integer.parseInt(paramPage);
+        int pageSize = Integer.parseInt(paramPageSize);
+
         String sortBy = request.getParameter("sortBy");
-        Sort.sort(sortBy, rooms);
+        LOG.trace("Order -->> " + sortBy);
+        List<Room> rooms = roomService.getAllRooms(page, pageSize, sortBy);
+
+
+        /*Sort.sort(sortBy, rooms);*/
 
         LOG.trace("Rooms --> " + rooms);
 
         request.setAttribute("rooms", rooms);
 
+        int roomsNumber = roomService.getRoomsCount();
+        int maxPage = (int) Math.ceil((double)roomsNumber / pageSize);
+
         RoomTypeService typeService = new RoomTypeServiceImpl();
         List<RoomType> roomTypes = typeService.getAllTypes();
         LOG.trace("Types --> " + roomTypes);
+
+        request.setAttribute("page", page);
+        request.setAttribute("pageSize", pageSize);
+        request.setAttribute("sortBy", sortBy);
+        request.setAttribute("maxPage", maxPage);
+
         request.setAttribute("types", roomTypes);
 
         LOG.debug("Command finished");

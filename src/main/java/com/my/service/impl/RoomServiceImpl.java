@@ -3,6 +3,7 @@ package com.my.service.impl;
 import com.my.dao.datasource.DatasourceType;
 import com.my.dao.factory.DaoFactory;
 import com.my.dao.RoomDao;
+import com.my.dao.mySqlDaoImpl.RoomDaoMySql;
 import com.my.entity.Room;
 import com.my.exception.AppException;
 import com.my.exception.DAOException;
@@ -29,13 +30,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> getAllRooms() throws ServiceException {
-
+    public List<Room> getAllRooms(int page, int pageSize, String order) throws ServiceException {
         List<Room> rooms;
         try {
             daoFactory.open();
             RoomDao roomDao = daoFactory.getRoomDao();
-            rooms = roomDao.getAll();
+            rooms = roomDao.getAll(page, pageSize, order);
         } catch (DAOException e) {
             LOG.error("Can not find rooms", e);
             throw new ServiceException("Can not find rooms");
@@ -75,5 +75,21 @@ public class RoomServiceImpl implements RoomService {
             daoFactory.close();
         }
         return room;
+    }
+
+    @Override
+    public int getRoomsCount() throws ServiceException {
+        int roomsCount;
+        try {
+            daoFactory.open();
+            RoomDao roomDao = daoFactory.getRoomDao();
+            roomsCount = roomDao.getRoomsNumber();
+        } catch (DAOException e) {
+            LOG.error("Cannot get rooms count", e);
+            throw new ServiceException("Cannot get rooms count", e);
+        } finally {
+            daoFactory.close();
+        }
+        return roomsCount;
     }
 }

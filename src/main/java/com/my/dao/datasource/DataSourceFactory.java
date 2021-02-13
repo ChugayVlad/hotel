@@ -27,7 +27,8 @@ public class DataSourceFactory {
                     LOG.trace("Data source ==> " + ds);
                 } catch (NamingException ex) {
                     LOG.error(Messages.ERR_CANNOT_OBTAIN_DATA_SOURCE, ex);
-                    throw new DAOException(Messages.ERR_CANNOT_OBTAIN_DATA_SOURCE, ex);
+                    //throw new DAOException(Messages.ERR_CANNOT_OBTAIN_DATA_SOURCE, ex);
+                    throw new IllegalStateException(Messages.ERR_CANNOT_OBTAIN_DATA_SOURCE, ex);
                 }
                 break;
             case ORACLE:

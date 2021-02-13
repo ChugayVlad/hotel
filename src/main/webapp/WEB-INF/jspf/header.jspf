@@ -24,7 +24,7 @@
                     This way we define the USER MENU.
                     ===========================================================================--%>
                     <c:when test="${userRole.name == 'client'}">
-                        <a href="controller?command=showRooms">Main page</a> &nbsp;
+                        <a href="controller?command=showRooms&pageSize=4&page=1">Main page</a> &nbsp;
                     </c:when>
                 </c:choose>
 
