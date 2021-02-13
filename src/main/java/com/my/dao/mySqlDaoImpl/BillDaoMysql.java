@@ -22,6 +22,8 @@ public class BillDaoMysql implements BillDao {
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM bills WHERE id=?";
     private static final String SQL_UPDATE_STATUS = "UPDATE bills SET status = ? WHERE id=?";
     private static final String SQL_SELECT_ALL_BY_DATE = "select * from bills a where a.room_id=? and a.room_id in (select b.room_id from bills b where ? BETWEEN b.date_in AND b.date_out OR ? BETWEEN b.date_in AND b.date_out)";
+    private static final String SQL_SELECT_BY_PARAMS = "SELECT * FROM bills WHERE room_id=? AND user_id=? AND date_in=? AND date_out=?";
+    private static final String SQL_DELETE = "DELETE FROM bills WHERE id=?";
     private Connection con;
 
     public BillDaoMysql(Connection con) {
@@ -50,8 +52,16 @@ public class BillDaoMysql implements BillDao {
     }
 
     @Override
-    public void delete(Long id) {
-
+    public void delete(Long id) throws DAOException {
+        PreparedStatement pstmt;
+        try {
+            pstmt = con.prepareStatement(SQL_DELETE);
+            pstmt.setLong(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Cannot delete bill", e);
+            throw new DAOException("Cannot delete bill", e);
+        }
     }
 
     @Override
@@ -119,8 +129,8 @@ public class BillDaoMysql implements BillDao {
         try {
             pstmt = con.prepareStatement(SQL_SELECT_ALL_BY_DATE);
             pstmt.setLong(1, roomId);
-            pstmt.setDate(2, dateIn);
-            pstmt.setDate(3, dateOut);
+            pstmt.setDate(2, dateIn, Calendar.getInstance());
+            pstmt.setDate(3, dateOut, Calendar.getInstance());
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 bills.add(extractBill(rs));
@@ -155,6 +165,28 @@ public class BillDaoMysql implements BillDao {
             closeStatement(pstmt);
         }
         return bills;
+    }
+
+    @Override
+    public Bill getBillByParams(Bill bill) throws DAOException {
+        Bill billFromDb = new Bill();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = con.prepareStatement(SQL_SELECT_BY_PARAMS);
+            pstmt.setLong(1, bill.getRoomId());
+            pstmt.setLong(2, bill.getUserId());
+            pstmt.setDate(3, bill.getDateIn(), Calendar.getInstance());
+            pstmt.setDate(4, bill.getDateOut(), Calendar.getInstance());
+            rs = pstmt.executeQuery();
+            if(rs.next()){
+                billFromDb = extractBill(rs);
+            }
+        } catch (SQLException e) {
+            LOG.error("Cannot get bill", e);
+            throw new DAOException("Cannot get bill", e);
+        }
+        return billFromDb;
     }
 
     private Bill extractBill(ResultSet rs) throws SQLException {

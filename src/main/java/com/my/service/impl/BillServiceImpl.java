@@ -6,6 +6,7 @@ import com.my.dao.RoomDao;
 import com.my.dao.datasource.DatasourceType;
 import com.my.dao.factory.DaoFactory;
 import com.my.entity.Bill;
+import com.my.entity.BillStatus;
 import com.my.entity.Order;
 import com.my.entity.Room;
 import com.my.entity.RoomStatus;
@@ -139,4 +140,26 @@ public class BillServiceImpl implements BillService {
             daoFactory.close();
         }
     }
+
+    @Override
+    public void deleteIfNotPaid(Bill bill) throws ServiceException {
+        try {
+            daoFactory.beginTransaction();
+            BillDao billDao = daoFactory.getBillDao();
+            Bill billToDelete = billDao.getBillByParams(bill);
+            LOG.trace("Bill found in db -->> " + billToDelete );
+            if(billToDelete.getStatus() == (BillStatus.NOT_PAID)){
+                LOG.trace("Delete bill with id -->> " + billToDelete.getId() );
+                billDao.delete(billToDelete.getId());
+            }
+            daoFactory.commitTransaction();
+        } catch (DAOException e) {
+            daoFactory.rollbackTransaction();
+            LOG.error("Cannot delete bill by these parameters " + bill, e);
+            throw new ServiceException("Cannot delete bill by these parameters " + bill, e);
+        } finally {
+            daoFactory.close();
+        }
+    }
+
 }

@@ -6,6 +6,7 @@ public class Room extends Entity {
     private Double price;
     private RoomStatus status;
     private RoomType type;
+    private String description;
 
     public Integer getPlaces() {
         return places;
@@ -37,6 +38,14 @@ public class Room extends Entity {
 
     public void setType(RoomType type) {
         this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

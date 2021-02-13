@@ -133,7 +133,7 @@ public class RoomDaoMySql implements RoomDao {
         room.setId(rs.getLong("id"));
         room.setPlaces(rs.getInt("places"));
         room.setPrice(rs.getDouble("price"));
-
+        room.setDescription(rs.getString("description"));
         room.setStatus(RoomStatus.valueOf(rs.getString("status")));
 
         RoomType type = new RoomType();

@@ -7,6 +7,7 @@ import com.my.entity.Room;
 import com.my.entity.RoomStatus;
 import com.my.entity.User;
 import com.my.exception.AppException;
+import com.my.exception.ServiceException;
 import com.my.service.BillService;
 import com.my.service.OrderService;
 import com.my.service.RoomService;
@@ -15,22 +16,48 @@ import com.my.service.impl.OrderServiceImpl;
 import com.my.service.impl.RoomServiceImpl;
 import com.my.util.Path;
 import org.apache.log4j.Logger;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SchedulerFactory;
+import org.quartz.impl.StdSchedulerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BookRoomCommand implements Command {
     private static final Logger LOG = Logger.getLogger(BookRoomCommand.class);
+
+    class AlarmTask extends TimerTask{
+        private Bill bill;
+        private BillService billService;
+
+        public AlarmTask(Bill bill) {
+            this.bill = bill;
+            billService = new BillServiceImpl();
+        }
+
+        @Override
+        public void run() {
+            LOG.trace("Check is paid bill -->> " + bill);
+            try {
+                billService.deleteIfNotPaid(bill);
+            } catch (ServiceException e) {
+                LOG.error("Cannot check payment status", e);
+            }
+        }
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
         HttpSession session = request.getSession();
 
-        if (session.getAttribute("user") == null){
+        if (session.getAttribute("user") == null) {
             return Path.COMMAND_LOGIN;
         }
 
@@ -39,7 +66,9 @@ public class BookRoomCommand implements Command {
 
 
         User user = (User) session.getAttribute("user");
+
         Long roomId = Long.parseLong(request.getParameter("roomId"));
+
         LocalDate dateIn = LocalDate.parse(request.getParameter("dateIn"));
         LocalDate dateOut = LocalDate.parse(request.getParameter("dateOut"));
 
@@ -62,6 +91,10 @@ public class BookRoomCommand implements Command {
         } else {
             billService.insertBill(bill);
         }
+
+        Timer timer = new Timer();
+        timer.schedule(new AlarmTask(bill),30000);
+
         LOG.debug("Command finished");
         return Path.COMMAND_OPEN_PERSONAL_ACCOUNT;
     }

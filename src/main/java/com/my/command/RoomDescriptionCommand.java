@@ -16,12 +16,15 @@ public class RoomDescriptionCommand implements Command{
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
+        RoomService roomService = new RoomServiceImpl();
 
-        String roomId = request.getParameter("roomId");
-        LOG.trace("Room id-->" + roomId);
-        request.setAttribute("roomId", roomId);
+        String roomIdReq = request.getParameter("roomId");
+        request.setAttribute("roomId", roomIdReq);
 
-        request.setAttribute("roomStatus", request.getParameter("roomStatus"));
+        Long roomId = Long.parseLong(roomIdReq);
+        Room room = roomService.getRoomById(roomId);
+
+        request.setAttribute("roomDesc", room.getDescription());
 
         LOG.debug("Command finished");
         return Path.PAGE_ROOM_DESCRIPTION;

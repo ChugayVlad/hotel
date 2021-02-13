@@ -11,4 +11,6 @@ public interface BillService {
     void insertBillWithOrder(Bill bill, Long orderId) throws ServiceException;
     Bill getBillById(Long billId) throws ServiceException;
     void updateStatus(Bill bill) throws ServiceException;
+    void deleteIfNotPaid(Bill bill) throws ServiceException;
+
 }
