@@ -18,12 +18,13 @@ import java.util.List;
 
 public class OrderDaoMySql implements OrderDao {
     private static final Logger LOG = Logger.getLogger(OrderDaoMySql.class);
-    private static final String SQL_SELECT_ALL = "SELECT  * FROM orders LEFT JOIN room_types ON orders.type_id = room_types.id WHERE room_id IS NULL";
+    private static final String SQL_SELECT_ALL = "SELECT  * FROM orders LEFT JOIN room_types ON orders.type_id = room_types.id WHERE room_id IS NULL LIMIT ? OFFSET ?";
     private static final String SQL_INSERT_ORDER = "INSERT INTO orders (id, places, type_id, date_in, date_out, user_id) VALUES (DEFAULT, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE_ROOM = "UPDATE orders SET room_id=?, sum=? WHERE id=?";
     private static final String SQL_GET_BY_ID = "SELECT * FROM orders LEFT JOIN room_types ON orders.type_id = room_types.id WHERE orders.id=?";
     private static final String SQL_SELECT_ALL_BY_USER = "SELECT * FROM orders  LEFT JOIN room_types ON orders.type_id = room_types.id WHERE user_id=?";
     private static final String SQL_DELETE_BY_ID = "DELETE FROM orders WHERE id=?";
+    private static final String SQL_ORDERS_COUNT = "SELECT COUNT(*) FROM orders";
 
     private Connection con;
 
@@ -106,13 +107,15 @@ public class OrderDaoMySql implements OrderDao {
     }
 
     @Override
-    public List<Order> getAll() throws DAOException {
+    public List<Order> getAll(int page, int pageSize) throws DAOException {
         List<Order> orders = new ArrayList<>();
-        Statement stmt = null;
+        PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(SQL_SELECT_ALL);
+            pstmt = con.prepareStatement(SQL_SELECT_ALL);
+            pstmt.setInt(1, pageSize);
+            pstmt.setInt(2, pageSize * (page - 1));
+            rs = pstmt.executeQuery();
             while (rs.next()) {
                 orders.add(extractOrder(rs));
             }
@@ -121,9 +124,14 @@ public class OrderDaoMySql implements OrderDao {
             throw new DAOException("Cannot get all orders", e);
         } finally {
             closeResultSet(rs);
-            closeStatement(stmt);
+            closeStatement(pstmt);
         }
         return orders;
+    }
+
+    @Override
+    public List<Order> getAll() throws DAOException {
+        return null;
     }
 
     @Override
@@ -146,6 +154,24 @@ public class OrderDaoMySql implements OrderDao {
             closeStatement(pstmt);
         }
         return orders;
+    }
+
+    @Override
+    public int getOrdersCount() throws DAOException {
+        int ordersNumber = 0;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = con.createStatement();
+            rs = stmt.executeQuery(SQL_ORDERS_COUNT);
+            if (rs.next()){
+                ordersNumber = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            LOG.error("Cannot get orders number", e);
+            throw new DAOException("Cannot get orders number", e);
+        }
+        return ordersNumber;
     }
 
     private Order extractOrder(ResultSet rs) throws SQLException {

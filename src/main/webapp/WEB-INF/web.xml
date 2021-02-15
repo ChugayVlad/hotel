@@ -40,6 +40,10 @@
         <error-code>404</error-code>
         <location>/WEB-INF/jsp/error.jsp</location>
     </error-page>
+    
+    <listener>
+        <listener-class>com.my.listener.ContextListener</listener-class>
+    </listener>
     <!--<error-page>
         <error-code>404</error-code>
         <location>/controller?command=error</location>

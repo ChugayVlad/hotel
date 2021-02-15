@@ -25,15 +25,26 @@ public class ShowRoomsCommand implements Command{
 
         String paramPage = request.getParameter("page");
         String paramPageSize = request.getParameter("pageSize");
-        int page = Integer.parseInt(paramPage);
-        int pageSize = Integer.parseInt(paramPageSize);
+
+        int page = 1;
+        if(paramPage != null && !paramPage.isEmpty()){
+            page = Integer.parseInt(paramPage);
+        }
+        int pageSize = 4;
+        if(paramPageSize != null && !paramPageSize.isEmpty()){
+            pageSize = Integer.parseInt(paramPageSize);
+        }
 
         String sortBy = request.getParameter("sortBy");
         LOG.trace("Order -->> " + sortBy);
+
+        String order = request.getParameter("order");
+        if(order == null){
+            order = "ASC";
+        }
+
         List<Room> rooms = roomService.getAllRooms(page, pageSize, sortBy);
 
-
-        /*Sort.sort(sortBy, rooms);*/
 
         LOG.trace("Rooms --> " + rooms);
 
@@ -48,8 +59,8 @@ public class ShowRoomsCommand implements Command{
 
         request.setAttribute("page", page);
         request.setAttribute("pageSize", pageSize);
-        request.setAttribute("sortBy", sortBy);
         request.setAttribute("maxPage", maxPage);
+        request.setAttribute("sortBy", sortBy);
 
         request.setAttribute("types", roomTypes);
 

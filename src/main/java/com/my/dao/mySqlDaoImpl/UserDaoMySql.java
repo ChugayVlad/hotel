@@ -17,10 +17,12 @@ import java.util.List;
 
 public class UserDaoMySql implements UserDao {
     private static final Logger LOG = Logger.getLogger(UserDaoMySql.class);
-    private Connection con;
+    private static final String SQL_UPDATE_USER = "UPDATE users SET email = ?, first_name = ?, last_name = ? WHERE id=?";
     private static final String SQL_SELECT_ALL = "SELECT * FROM users";
     private static final String SQL_FIND_USER_BY_EMAIL = "SELECT * FROM users WHERE email=?";
     private static final String SQL_INSERT_USER = "INSERT INTO users (id, first_name, last_name, email, password, role_id) VALUES (DEFAULT, ?, ?, ?, ?, ?)";
+
+    private Connection con;
 
     public UserDaoMySql(Connection con) {
         this.con = con;
@@ -47,8 +49,20 @@ public class UserDaoMySql implements UserDao {
     }
 
     @Override
-    public void update(User entity) throws DAOException {
-
+    public void update(User user) throws DAOException {
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = con.prepareStatement(SQL_UPDATE_USER);
+            int k = 0;
+            pstmt.setString(++k, user.getEmail());
+            pstmt.setString(++k, user.getFirstName());
+            pstmt.setString(++k, user.getLastName());
+            pstmt.setLong(++k, user.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Cannot update user", e);
+            throw new DAOException("Cannot update user", e);
+        }
     }
 
     @Override

@@ -29,12 +29,12 @@
     <tbody>
     <c:forEach var="order" items="${orders}">
         <tr>
-            <td><c:out value="${order.places}"/></td>
-            <td><c:out value="${order.dateIn}"/></td>
-            <td><c:out value="${order.dateOut}"/></td>
-            <td><c:out value="${order.type.name}"/></td>
-            <td><c:out value="${order.userId}"/></td>
-            <td><c:out value="${order.roomId}"/></td>
+            <td>${order.places}</td>
+            <td>${order.dateIn}</td>
+            <td>${order.dateOut}</td>
+            <td>${order.type.name}</td>
+            <td>${order.userId}</td>
+            <td>${order.roomId}</td>
             <td>
                 <a href="controller?command=findRoomsForUser&orderId=${order.id}">Find rooms for user</a>
             </td>
@@ -43,5 +43,7 @@
     </tbody>
 </table>
 <c:if test="${not empty message}">${message}</c:if>
+
+<util:pagination path="controller?command=showOrders" page="${page}" pageSize="${pageSize}" maxPage="${maxPage}"/>
 </body>
 </html>

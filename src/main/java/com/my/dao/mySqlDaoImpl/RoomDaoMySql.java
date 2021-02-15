@@ -85,7 +85,7 @@ public class RoomDaoMySql implements RoomDao {
             LOG.trace("Order by -->> " + order);
             pstmt.setInt(1, pageSize);
             pstmt.setInt(2, pageSize * (page - 1));
-
+            LOG.trace("OFFSET -->> " + (pageSize * (page - 1)));
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 rooms.add(extractRoom(rs));

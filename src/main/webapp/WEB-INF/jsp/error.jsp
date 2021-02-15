@@ -16,19 +16,16 @@
 
 <table id="main-container">
 
-    <%-- HEADER --%>
     <%@ include file="/WEB-INF/jspf/header.jspf" %>
-    <%-- HEADER --%>
 
     <tr>
         <td class="content">
-            <%-- CONTENT --%>
 
             <h2 class="error">
                 The following error occurred
             </h2>
 
-            <%-- this way we obtain an information about an exception (if it has been occurred) --%>
+
             <c:set var="code" value="${requestScope['javax.servlet.error.status_code']}"/>
             <c:set var="message" value="${requestScope['javax.servlet.error.message']}"/>
             <c:set var="exception" value="${requestScope['javax.servlet.error.exception']}"/>
@@ -41,16 +38,9 @@
                 <h3>${message}</h3>
             </c:if>
 
-            <c:if test="${not empty exception}">
-                <% exception.printStackTrace(new PrintWriter(out)); %>
-            </c:if>
-
-            <%-- if we get this page using forward --%>
             <c:if test="${not empty errorMessage}">
                 <h3>${errorMessage}</h3>
             </c:if>
-
-            <%-- CONTENT --%>
         </td>
     </tr>
 </table>

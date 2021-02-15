@@ -32,11 +32,29 @@ public class ShowOrdersCommand implements Command {
             throw new AppException("You dont have permissions!!!");
         }
 
+        String paramPage = request.getParameter("page");
+        String paramPageSize = request.getParameter("pageSize");
+        int page = 1;
+        if(paramPage != null && !paramPage.isEmpty()){
+            page = Integer.parseInt(paramPage);
+        }
+        int pageSize = 5;
+        if(paramPageSize != null && !paramPageSize.isEmpty()){
+            pageSize = Integer.parseInt(paramPageSize);
+        }
+
         OrderService orderService = new OrderServiceImpl();
-        List<Order> orders = orderService.getAllOrders();
+        List<Order> orders = orderService.getAllOrders(page, pageSize);
         LOG.trace("Orders --> " + orders);
 
         request.setAttribute("orders", orders);
+
+        int roomsNumber = orderService.getOrdersCount();
+        int maxPage = (int) Math.ceil((double)roomsNumber / pageSize);
+
+        request.setAttribute("page", page);
+        request.setAttribute("pageSize", pageSize);
+        request.setAttribute("maxPage", maxPage);
 
         LOG.debug("Command finished");
         return Path.PAGE_ORDERS;

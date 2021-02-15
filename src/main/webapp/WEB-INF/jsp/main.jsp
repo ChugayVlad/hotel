@@ -7,7 +7,6 @@
 --%>
 <%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
-<%@ taglib prefix="util" tagdir="/WEB-INF/tags" %>
 <html>
 <head>
     <title>Title</title>
@@ -17,37 +16,36 @@
 <c:if test="${user.roleId ne 0}">
     <form id="order" action="controller" method="post">
         <input type="hidden" name="command" value="makeOrder"/>
-
-        <fieldset>
-            <legend>Date in</legend>
+            Date in
             <input required type="date" name="dateIn">
-        </fieldset>
 
-        <fieldset>
-            <legend>Date out</legend>
+            Date out
             <input required type="date" name="dateOut">
-        </fieldset>
 
-        <fieldset>
-            <legend>Places</legend>
+            Places
             <select name="places">
                 <option>1</option>
                 <option>2</option>
                 <option>3</option>
                 <option>4</option>
             </select>
-        </fieldset>
 
-        <fieldset>
-            <legend>Room type</legend>
+            Room type
             <select name="roomType">
                 <c:forEach var="type" items="${types}">
                     <option value="${type.id}"><c:out value="${type.name}"/></option>
                 </c:forEach>
-            </select>
-        </fieldset>
+            </select> <br>
         <input type="submit" value="Make order">
     </form>
+</c:if>
+
+<c:if test="${user.roleId == 0}">
+
+        <a href="controller?command=showRooms&sortBy=${sortBy}&pageSize=${pageSize}&page=${page}&status=VACANT">Vacant</a>
+        <a href="controller?command=showRooms&sortBy=${sortBy}&pageSize=${pageSize}&page=${page}&status=BOOKED">Booked</a>
+        <a href="controller?command=showRooms&sortBy=${sortBy}&pageSize=${pageSize}&page=${page}&status=BUSY">Busy</a>
+        <a href="controller?command=showRooms&sortBy=${sortBy}&pageSize=${pageSize}&page=${page}&status=NOT_AVAILABLE">Not available</a>
 </c:if>
 
 <table id="rooms-list">
@@ -71,8 +69,6 @@
             </td>
         </tr>
     </c:forEach>
-
-
 
     </tbody>
 </table>

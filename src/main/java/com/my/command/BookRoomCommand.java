@@ -16,10 +16,6 @@ import com.my.service.impl.OrderServiceImpl;
 import com.my.service.impl.RoomServiceImpl;
 import com.my.util.Path;
 import org.apache.log4j.Logger;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SchedulerFactory;
-import org.quartz.impl.StdSchedulerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

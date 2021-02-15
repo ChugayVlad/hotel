@@ -5,59 +5,29 @@
 
 <tr>
     <td id="header">
-
         <c:if test="${not empty user}">
-            <%--===========================================================================
-            This is the user menu.
-            ===========================================================================--%>
-
             <div id="leftHeader">
                 <c:choose>
-                    <%--===========================================================================
-                    This way we define the ADMIN MENU.
-                    ===========================================================================--%>
                     <c:when test="${userRole.name == 'admin' }">
-                        <a href="controller?command=showOrders">All orders</a> &nbsp;
+                        <a href="controller?command=showOrders">Orders</a> &nbsp;
+                        <a href="controller?command=showRooms">Manage rooms</a>
                     </c:when>
 
-                    <%--===========================================================================
-                    This way we define the USER MENU.
-                    ===========================================================================--%>
                     <c:when test="${userRole.name == 'client'}">
-                        <a href="controller?command=showRooms&pageSize=4&page=1">Main page</a> &nbsp;
+                        <a href="controller?command=showRooms&sortBy=price">Main page</a> &nbsp;
+                        <a href="controller?command=openPersonalAccount">Personal account</a> &nbsp;
                     </c:when>
                 </c:choose>
 
-                    <%--===========================================================================
-                    This way we define the settings anchor.
-                    ===========================================================================--%>
-                <a href="controller?command=openPersonalAccount">Personal account</a> &nbsp;
-
             </div>
-
-            <%--===========================================================================
-            This way we define the menu located at the right of header.
-            ===========================================================================--%>
             <div id="rightHeader" >
-                    <%--===========================================================================
-                    Type user name if the user object is presented in the current session.
-                    ===========================================================================--%>
                 <c:out value="${user.firstName} ${user.lastName}"/>
-
-                    <%--===========================================================================
-                    Type user role name if the user object is presented in the current session.
-                    ===========================================================================--%>
                 <c:if test="${not empty userRole}">
                     <c:out value="(${userRole.name})"/>
                 </c:if>
-
-                    <%--===========================================================================
-                    Type link to logout
-                    ===========================================================================--%>
                 <a href="controller?command=logout">
                     Logout
                 </a>
-
             </div>
         </c:if>
 

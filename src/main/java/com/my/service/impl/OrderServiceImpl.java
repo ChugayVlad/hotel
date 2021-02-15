@@ -51,12 +51,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAllOrders() throws ServiceException {
+    public List<Order> getAllOrders(int page, int pageSize) throws ServiceException {
         List<Order> orders;
         try {
             daoFactory.open();
             OrderDao orderDao = daoFactory.getOrderDao();
-            orders = orderDao.getAll();
+            orders = orderDao.getAll(page, pageSize);
         } catch (DAOException e) {
             LOG.error("Can not get all orders", e);
             throw new ServiceException("Can not all orders", e);
@@ -135,5 +135,21 @@ public class OrderServiceImpl implements OrderService {
         } finally {
             daoFactory.close();
         }
+    }
+
+    @Override
+    public int getOrdersCount() throws ServiceException {
+        int ordersCount;
+        try {
+            daoFactory.open();
+            OrderDao orderDao = daoFactory.getOrderDao();
+            ordersCount = orderDao.getOrdersCount();
+        } catch (DAOException e) {
+            LOG.error("Cannot get orders count", e);
+            throw new ServiceException("Cannot get orders count", e);
+        } finally {
+            daoFactory.close();
+        }
+        return ordersCount;
     }
 }

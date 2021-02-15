@@ -10,29 +10,27 @@
 <html>
 <head>
     <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
+
 <body>
-<table id="main-container">
-    <tr>
-        <td class="content center">
-            <form id="login_form" action="controller" method="post">
+<div class="container mx-auto my-xl-5" style="width: 300px;">
+    <form id="login-form" action="controller" method="post">
 
-                <input type="hidden" name="command" value="login"/>
+        <input type="hidden" name="command" value="login"/>
 
-                <fieldset >
-                    <legend>Email</legend>
-                    <input required name="email"/><br/>
-                </fieldset><br/>
-                <fieldset>
-                    <legend>Password</legend>
-                    <input required type="password" name="password"/>
-                </fieldset><br/>
-                <input type="submit" value="Login">
-            </form>
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="text" id="inputEmail" name="email" class="form-control" placeholder="Email address" required
+               autofocus>
 
-            <a href="controller?command=register">Sign up</a>
-        </td>
-    </tr>
-</table>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+
+        <button class="btn btn-lg btn-primary btn-block my-3" style="align-content: center" type="submit">Sign in</button>
+    </form>
+
+    <a href="controller?command=register">Sign up</a>
+</div>
 </body>
 </html>

@@ -28,9 +28,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUser(String email, String password) throws AppException {
+    public User findUser(String email, String password) throws ServiceException {
         if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
-            throw new AppException("Login/password cannot be empty");
+            throw new ServiceException("Login/password cannot be empty");
         }
         User user = new User();
         UserDao userDao;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
             user = userDao.getUserByEmail(email);
             LOG.trace("Found in DB: user --> " + user);
             if (user == null || !password.equals(user.getPassword())) {
-                throw new AppException("Cannot find user with such login/password");
+                throw new ServiceException("Cannot find user with such login/password");
             }
         } catch (DAOException e) {
             LOG.error(e);
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void insertUser(User user) throws AppException {
+    public void insertUser(User user) throws ServiceException {
         UserDao userDao;
         try {
             daoFactory.open();
@@ -60,7 +60,22 @@ public class UserServiceImpl implements UserService {
             userDao.insert(user);
         } catch (DAOException e) {
             LOG.error(Messages.ERR_CANNOT_CREATE_USER, e);
-            throw new AppException(Messages.ERR_CANNOT_CREATE_USER, e);
+            throw new ServiceException(Messages.ERR_CANNOT_CREATE_USER, e);
+        } finally {
+            daoFactory.close();
+        }
+    }
+
+    @Override
+    public void update(User user) throws ServiceException {
+        UserDao userDao;
+        try {
+            daoFactory.open();
+            userDao = daoFactory.getUserDao();
+            userDao.update(user);
+        } catch (DAOException e) {
+            LOG.error("Cannot update user", e);
+            throw new ServiceException("Cannot update user", e);
         } finally {
             daoFactory.close();
         }

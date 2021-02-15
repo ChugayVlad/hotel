@@ -29,6 +29,7 @@ public class CommandContainer {
         commands.put("setRoom", new SetRoomForUserCommand());
         commands.put("pay", new PayCommand());
         commands.put("cancelOrder", new CancelOrderCommand());
+        commands.put("editUser", new EditUserCommand());
 
         LOG.debug("Command container was successfully initialized");
         LOG.trace("Number of commands --> " + commands.size());

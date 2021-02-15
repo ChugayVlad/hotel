@@ -24,14 +24,24 @@ public class OpenPersonalAccountCommand implements Command {
         LOG.debug("Command starts");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
+        String to = request.getParameter("to");
 
-        BillService billService = new BillServiceImpl();
-        List<Bill> bills = billService.getAllBills(user.getId());
-        request.setAttribute("bills", bills);
+        if ("bills".equals(to)) {
+            BillService billService = new BillServiceImpl();
+            List<Bill> bills = billService.getAllBills(user.getId());
+            LOG.trace("Bills -->> " + bills);
+            request.setAttribute("bills", bills);
+        }
 
-        OrderService orderService = new OrderServiceImpl();
-        List<Order> orders = orderService.getAllOrdersByUser(user.getId());
-        request.setAttribute("orders", orders);
+        if ("orders".equals(to)) {
+            OrderService orderService = new OrderServiceImpl();
+            List<Order> orders = orderService.getAllOrdersByUser(user.getId());
+            request.setAttribute("orders", orders);
+        }
+
+        if (to != null){
+            request.setAttribute("to", to);
+        }
 
         LOG.debug("Command finished");
         return Path.PAGE_PERSONAL_ACCOUNT;
