@@ -4,6 +4,7 @@ import com.my.dao.OrderDao;
 import com.my.entity.Order;
 import com.my.entity.Room;
 import com.my.entity.RoomType;
+import com.my.entity.User;
 import com.my.exception.DAOException;
 import org.apache.log4j.Logger;
 
@@ -18,11 +19,11 @@ import java.util.List;
 
 public class OrderDaoMySql implements OrderDao {
     private static final Logger LOG = Logger.getLogger(OrderDaoMySql.class);
-    private static final String SQL_SELECT_ALL = "SELECT  * FROM orders LEFT JOIN room_types ON orders.type_id = room_types.id WHERE room_id IS NULL LIMIT ? OFFSET ?";
+    private static final String SQL_SELECT_ALL = "SELECT  * FROM orders LEFT JOIN room_types ON orders.type_id = room_types.id LEFT JOIN users u on orders.user_id = u.id WHERE room_id IS NULL LIMIT ? OFFSET ?";
     private static final String SQL_INSERT_ORDER = "INSERT INTO orders (id, places, type_id, date_in, date_out, user_id) VALUES (DEFAULT, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE_ROOM = "UPDATE orders SET room_id=?, sum=? WHERE id=?";
-    private static final String SQL_GET_BY_ID = "SELECT * FROM orders LEFT JOIN room_types ON orders.type_id = room_types.id WHERE orders.id=?";
-    private static final String SQL_SELECT_ALL_BY_USER = "SELECT * FROM orders  LEFT JOIN room_types ON orders.type_id = room_types.id WHERE user_id=?";
+    private static final String SQL_GET_BY_ID = "SELECT * FROM orders LEFT JOIN room_types ON orders.type_id = room_types.id LEFT JOIN users u on orders.user_id = u.id WHERE orders.id=?";
+    private static final String SQL_SELECT_ALL_BY_USER = "SELECT * FROM orders  LEFT JOIN room_types ON orders.type_id = room_types.id LEFT JOIN users u on orders.user_id = u.id WHERE user_id=?";
     private static final String SQL_DELETE_BY_ID = "DELETE FROM orders WHERE id=?";
     private static final String SQL_ORDERS_COUNT = "SELECT COUNT(*) FROM orders";
 
@@ -42,7 +43,7 @@ public class OrderDaoMySql implements OrderDao {
             stmt.setLong(++k, order.getType().getId());
             stmt.setDate(++k, order.getDateIn(), Calendar.getInstance());
             stmt.setDate(++k, order.getDateOut(), Calendar.getInstance());
-            stmt.setLong(++k, order.getUserId());
+            stmt.setLong(++k, order.getUser().getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             LOG.error("Cannot insert order", e);
@@ -177,7 +178,12 @@ public class OrderDaoMySql implements OrderDao {
     private Order extractOrder(ResultSet rs) throws SQLException {
         Order order = new Order();
         order.setId(rs.getLong("id"));
-        order.setUserId(rs.getLong("user_id"));
+
+        User user = new User();
+        user.setId(rs.getLong("user_id"));
+        user.setFirstName(rs.getString("first_name"));
+        user.setLastName(rs.getString("last_name"));
+        order.setUser(user);
         order.setRoomId(rs.getLong("room_id"));
         order.setDateIn(rs.getDate("date_in"));
         order.setDateOut(rs.getDate("date_out"));

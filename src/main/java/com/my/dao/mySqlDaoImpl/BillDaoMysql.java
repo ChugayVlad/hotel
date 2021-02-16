@@ -3,6 +3,7 @@ package com.my.dao.mySqlDaoImpl;
 import com.my.dao.BillDao;
 import com.my.entity.Bill;
 import com.my.entity.BillStatus;
+import com.my.entity.User;
 import com.my.exception.DAOException;
 import org.apache.log4j.Logger;
 
@@ -18,12 +19,13 @@ import java.util.List;
 public class BillDaoMysql implements BillDao {
     private static final Logger LOG = Logger.getLogger(BillDaoMysql.class);
     private static final String SQL_INSERT_BILL = "INSERT INTO bills (id, sum, user_id, room_id, date_in, date_out, status) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)";
-    private static final String SQL_SELECT_ALL_BY_USER = "SELECT * FROM bills WHERE user_id=?";
-    private static final String SQL_SELECT_BY_ID = "SELECT * FROM bills WHERE id=?";
+    private static final String SQL_SELECT_ALL_BY_USER = "SELECT * FROM bills LEFT JOIN users u on bills.user_id = u.id WHERE user_id=?";
+    private static final String SQL_SELECT_BY_ID = "SELECT * FROM bills LEFT JOIN users u on bills.user_id = u.id WHERE bills.id=?";
     private static final String SQL_UPDATE_STATUS = "UPDATE bills SET status = ? WHERE id=?";
-    private static final String SQL_SELECT_ALL_BY_DATE = "select * from bills a where a.room_id=? and a.room_id in (select b.room_id from bills b where ? BETWEEN b.date_in AND b.date_out OR ? BETWEEN b.date_in AND b.date_out)";
-    private static final String SQL_SELECT_BY_PARAMS = "SELECT * FROM bills WHERE room_id=? AND user_id=? AND date_in=? AND date_out=?";
-    private static final String SQL_DELETE = "DELETE FROM bills WHERE id=?";
+    private static final String SQL_SELECT_ALL_BY_DATE = "select * from bills a LEFT JOIN users u on a.user_id = u.id where a.room_id=? and a.room_id in (select b.room_id from bills b where ? BETWEEN b.date_in AND b.date_out OR ? BETWEEN b.date_in AND b.date_out)";
+    private static final String SQL_SELECT_BY_PARAMS = "SELECT * FROM bills LEFT JOIN users u on bills.user_id = u.id WHERE room_id=? AND user_id=? AND date_in=? AND date_out=?";
+    private static final String SQL_DELETE = "DELETE FROM bills  WHERE id=?";
+    private static final String SQL_SELECT_BY_ROOM = "SELECT * FROM bills LEFT JOIN users u on bills.user_id = u.id WHERE room_id=?";
     private Connection con;
 
     public BillDaoMysql(Connection con) {
@@ -37,7 +39,7 @@ public class BillDaoMysql implements BillDao {
             stmt = con.prepareStatement(SQL_INSERT_BILL);
             int k = 0;
             stmt.setDouble(++k, bill.getSum());
-            stmt.setLong(++k, bill.getUserId());
+            stmt.setLong(++k, bill.getUser().getId());
             stmt.setLong(++k, bill.getRoomId());
             stmt.setDate(++k, bill.getDateIn(), Calendar.getInstance());
             stmt.setDate(++k, bill.getDateOut(), Calendar.getInstance());
@@ -175,7 +177,7 @@ public class BillDaoMysql implements BillDao {
         try {
             pstmt = con.prepareStatement(SQL_SELECT_BY_PARAMS);
             pstmt.setLong(1, bill.getRoomId());
-            pstmt.setLong(2, bill.getUserId());
+            pstmt.setLong(2, bill.getUser().getId());
             pstmt.setDate(3, bill.getDateIn(), Calendar.getInstance());
             pstmt.setDate(4, bill.getDateOut(), Calendar.getInstance());
             rs = pstmt.executeQuery();
@@ -189,11 +191,34 @@ public class BillDaoMysql implements BillDao {
         return billFromDb;
     }
 
+    @Override
+    public List<Bill> getBillByRoom(Long roomId) throws DAOException {
+        List<Bill> bills = new ArrayList<>();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = con.prepareStatement(SQL_SELECT_BY_ROOM);
+            pstmt.setLong(1, roomId);
+            rs = pstmt.executeQuery();
+            while (rs.next()){
+               bills.add(extractBill(rs));
+            }
+        } catch (SQLException e) {
+            LOG.error("Cannot get bill by room", e);
+            throw new DAOException("Cannot get bill by room", e);
+        }
+        return bills;
+    }
+
     private Bill extractBill(ResultSet rs) throws SQLException {
         Bill bill = new Bill();
+        User user = new User();
+        user.setId(rs.getLong("user_id"));
+        user.setFirstName(rs.getString("first_name"));
+        user.setLastName(rs.getString("last_name"));
         bill.setId(rs.getLong("id"));
         bill.setSum(rs.getDouble("sum"));
-        bill.setUserId(rs.getLong("user_id"));
+        bill.setUser(user);
         bill.setRoomId(rs.getLong("room_id"));
         bill.setDateIn(rs.getDate("date_in"));
         bill.setDateOut(rs.getDate("date_out"));

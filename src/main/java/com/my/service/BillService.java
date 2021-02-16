@@ -13,4 +13,5 @@ public interface BillService {
     void updateStatus(Bill bill) throws ServiceException;
     void deleteIfNotPaid(Bill bill) throws ServiceException;
 
+    List<Bill> getBillByRoom(Long roomId) throws ServiceException;
 }

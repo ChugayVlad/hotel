@@ -14,6 +14,7 @@ import com.my.service.RoomService;
 import com.my.service.impl.BillServiceImpl;
 import com.my.service.impl.OrderServiceImpl;
 import com.my.service.impl.RoomServiceImpl;
+import com.my.util.DeleteBillJob;
 import com.my.util.Path;
 import org.apache.log4j.Logger;
 
@@ -27,26 +28,6 @@ import java.util.TimerTask;
 
 public class BookRoomCommand implements Command {
     private static final Logger LOG = Logger.getLogger(BookRoomCommand.class);
-
-    class AlarmTask extends TimerTask{
-        private Bill bill;
-        private BillService billService;
-
-        public AlarmTask(Bill bill) {
-            this.bill = bill;
-            billService = new BillServiceImpl();
-        }
-
-        @Override
-        public void run() {
-            LOG.trace("Check is paid bill -->> " + bill);
-            try {
-                billService.deleteIfNotPaid(bill);
-            } catch (ServiceException e) {
-                LOG.error("Cannot check payment status", e);
-            }
-        }
-    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
@@ -71,7 +52,7 @@ public class BookRoomCommand implements Command {
 
         Bill bill = new Bill();
         bill.setRoomId(roomId);
-        bill.setUserId(user.getId());
+        bill.setUser(user);
         bill.setStatus(BillStatus.NOT_PAID);
         bill.setDateIn(Date.valueOf(dateIn));
         bill.setDateOut(Date.valueOf(dateOut));
@@ -89,7 +70,7 @@ public class BookRoomCommand implements Command {
         }
 
         Timer timer = new Timer();
-        timer.schedule(new AlarmTask(bill),30000);
+        timer.schedule(new DeleteBillJob(bill),30000);
 
         LOG.debug("Command finished");
         return Path.COMMAND_OPEN_PERSONAL_ACCOUNT;

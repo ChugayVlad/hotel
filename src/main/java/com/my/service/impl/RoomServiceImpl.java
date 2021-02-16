@@ -30,12 +30,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> getAllRooms(int page, int pageSize, String order) throws ServiceException {
+    public List<Room> getAllRooms(int page, int pageSize, String sort, String order, String status) throws ServiceException {
         List<Room> rooms;
         try {
             daoFactory.open();
             RoomDao roomDao = daoFactory.getRoomDao();
-            rooms = roomDao.getAll(page, pageSize, order);
+            rooms = roomDao.getAll(page, pageSize, sort, order, status);
         } catch (DAOException e) {
             LOG.error("Can not find rooms", e);
             throw new ServiceException("Can not find rooms");
@@ -84,6 +84,22 @@ public class RoomServiceImpl implements RoomService {
             daoFactory.open();
             RoomDao roomDao = daoFactory.getRoomDao();
             roomsCount = roomDao.getRoomsNumber();
+        } catch (DAOException e) {
+            LOG.error("Cannot get rooms count", e);
+            throw new ServiceException("Cannot get rooms count", e);
+        } finally {
+            daoFactory.close();
+        }
+        return roomsCount;
+    }
+
+    @Override
+    public int getRoomsNumberByStatus(String status) throws ServiceException {
+        int roomsCount;
+        try {
+            daoFactory.open();
+            RoomDao roomDao = daoFactory.getRoomDao();
+            roomsCount = roomDao.getRoomsNumberByStatus(status);
         } catch (DAOException e) {
             LOG.error("Cannot get rooms count", e);
             throw new ServiceException("Cannot get rooms count", e);

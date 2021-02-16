@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class Bill extends Entity{
     private Double sum;
-    private Long userId;
+    private User user;
     private Long roomId;
     private Date dateIn;
     private Date dateOut;
@@ -18,12 +18,12 @@ public class Bill extends Entity{
         this.sum = sum;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getRoomId() {
@@ -62,7 +62,7 @@ public class Bill extends Entity{
     public String toString() {
         return "Bill{" +
                 "sum=" + sum +
-                ", userId=" + userId +
+                ", user=" + user +
                 ", roomId=" + roomId +
                 ", dateIn=" + dateIn +
                 ", dateOut=" + dateOut +

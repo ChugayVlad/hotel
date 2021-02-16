@@ -51,7 +51,7 @@ public class CreateOrderCommand implements Command {
         order.setType(type);
 
         User user = (User) session.getAttribute("user");
-        order.setUserId(user.getId());
+        order.setUser(user);
         orderService = new OrderServiceImpl();
         orderService.insertOrder(order);
 

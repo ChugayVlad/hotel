@@ -46,7 +46,6 @@
                 <th scope="col">Date in</th>
                 <th scope="col">Date out</th>
                 <th scope="col">Type</th>
-                <th scope="col">User id</th>
                 <th scope="col">Room id</th>
                 <th scope="col">Sum to pay</th>
                 <th scope="col">BUTTON</th>
@@ -59,7 +58,6 @@
                     <td>${order.dateIn}</td>
                     <td>${order.dateOut}</td>
                     <td>${order.type.name}</td>
-                    <td>${order.userId}</td>
                     <td>${order.roomId}</td>
                     <td>${order.sum}</td>
                     <td>

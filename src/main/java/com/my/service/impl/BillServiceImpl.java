@@ -40,7 +40,7 @@ public class BillServiceImpl implements BillService {
         RoomDao roomDao;
 
         LocalDate currentDate = LocalDate.now();
-        if (bill.getDateIn().compareTo(Date.valueOf(currentDate)) < 0 || bill.getDateOut().compareTo(Date.valueOf(currentDate)) < 0){
+        if (bill.getDateIn().compareTo(Date.valueOf(currentDate)) < 0 || bill.getDateOut().compareTo(Date.valueOf(currentDate)) < 0) {
             throw new ServiceException("Date cannot be past!");
         }
 
@@ -49,7 +49,7 @@ public class BillServiceImpl implements BillService {
             billDao = daoFactory.getBillDao();
             List<Bill> bills = billDao.getAllByDate(bill.getRoomId(), bill.getDateIn(), bill.getDateOut());
 
-            if(!bills.isEmpty()){
+            if (!bills.isEmpty()) {
                 throw new ServiceException("Sorry, room is busy for these dates");
             }
 
@@ -58,7 +58,7 @@ public class BillServiceImpl implements BillService {
             Room room = roomDao.get(bill.getRoomId());
 
             long daysStay = ChronoUnit.DAYS.between(bill.getDateIn().toLocalDate(), bill.getDateOut().toLocalDate());
-            Double sum = daysStay*room.getPrice();
+            Double sum = daysStay * room.getPrice();
             bill.setSum(sum);
 
             billDao.insert(bill);
@@ -146,11 +146,13 @@ public class BillServiceImpl implements BillService {
         try {
             daoFactory.beginTransaction();
             BillDao billDao = daoFactory.getBillDao();
+            RoomDao roomDao = daoFactory.getRoomDao();
             Bill billToDelete = billDao.getBillByParams(bill);
-            LOG.trace("Bill found in db -->> " + billToDelete );
-            if(billToDelete.getStatus() == (BillStatus.NOT_PAID)){
-                LOG.trace("Delete bill with id -->> " + billToDelete.getId() );
+            LOG.trace("Bill found in db -->> " + billToDelete);
+            if (billToDelete.getStatus() == (BillStatus.NOT_PAID)) {
+                LOG.trace("Delete bill with id -->> " + billToDelete.getId());
                 billDao.delete(billToDelete.getId());
+                roomDao.updateStatus(RoomStatus.VACANT, bill.getRoomId());
             }
             daoFactory.commitTransaction();
         } catch (DAOException e) {
@@ -162,4 +164,19 @@ public class BillServiceImpl implements BillService {
         }
     }
 
+    @Override
+    public List<Bill> getBillByRoom(Long roomId) throws ServiceException {
+        List<Bill> bills;
+        try {
+            daoFactory.open();
+            BillDao billDao = daoFactory.getBillDao();
+            bills = billDao.getBillByRoom(roomId);
+        } catch (DAOException e) {
+            LOG.error("Cannot get bill by room", e);
+            throw new ServiceException("Cannot get bill by room", e);
+        } finally {
+            daoFactory.close();
+        }
+        return bills;
+    }
 }

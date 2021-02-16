@@ -8,7 +8,6 @@ import com.my.service.impl.RoomServiceImpl;
 import com.my.service.RoomTypeService;
 import com.my.service.impl.RoomTypeServiceImpl;
 import com.my.util.Path;
-import com.my.util.Sort;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +16,8 @@ import java.util.List;
 
 public class ShowRoomsCommand implements Command{
     private static final Logger LOG = Logger.getLogger(ShowRoomsCommand.class);
+    private static final String DEFAULT_ORDER = "ASC";
+    private static final String DEFAULT_SORT = "price";
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
@@ -36,21 +37,31 @@ public class ShowRoomsCommand implements Command{
         }
 
         String sortBy = request.getParameter("sortBy");
+        if ("".equals(sortBy)){
+            sortBy = DEFAULT_SORT;
+        }
         LOG.trace("Order -->> " + sortBy);
+        String status = request.getParameter("status");
 
-        String order = request.getParameter("order");
-        if(order == null){
-            order = "ASC";
+        String order =  request.getParameter("order");
+        if (order == null){
+            order = DEFAULT_ORDER;
         }
 
-        List<Room> rooms = roomService.getAllRooms(page, pageSize, sortBy);
-
+        List<Room> rooms = roomService.getAllRooms(page, pageSize,  sortBy, order, status);
 
         LOG.trace("Rooms --> " + rooms);
 
         request.setAttribute("rooms", rooms);
 
-        int roomsNumber = roomService.getRoomsCount();
+        int roomsNumber = 0;
+        if ("all".equals(status) || status==null || "".equals(status)){
+            roomsNumber = roomService.getRoomsCount();
+        } else {
+            roomsNumber = roomService.getRoomsNumberByStatus(status);
+        }
+        LOG.trace("Status --> " + status);
+
         int maxPage = (int) Math.ceil((double)roomsNumber / pageSize);
 
         RoomTypeService typeService = new RoomTypeServiceImpl();
@@ -61,6 +72,8 @@ public class ShowRoomsCommand implements Command{
         request.setAttribute("pageSize", pageSize);
         request.setAttribute("maxPage", maxPage);
         request.setAttribute("sortBy", sortBy);
+        request.setAttribute("order", order);
+        request.setAttribute("status", status);
 
         request.setAttribute("types", roomTypes);
 

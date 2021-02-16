@@ -8,7 +8,9 @@ public class Order extends Entity {
     private Date dateIn;
     private Date dateOut;
     private RoomType type;
-    private Long userId;
+
+    private User user;
+
     private Long roomId;
     private Double sum;
 
@@ -44,12 +46,12 @@ public class Order extends Entity {
         this.type = type;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getRoomId() {
@@ -75,7 +77,7 @@ public class Order extends Entity {
                 ", dateIn=" + dateIn +
                 ", dateOut=" + dateOut +
                 ", type=" + type +
-                ", userId=" + userId +
+                ", user=" + user +
                 ", roomId=" + roomId +
                 ", sum=" + sum +
                 '}';

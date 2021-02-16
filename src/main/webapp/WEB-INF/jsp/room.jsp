@@ -13,15 +13,35 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
-${roomDesc}
-<form id="room_description" action="controller" method="post">
-    <input type="hidden" name="command" value="bookRoom"/>
-    <input type="hidden" name="roomId" value="${roomId}">
-    Date in
-    <input required type="date" name="dateIn">
-    Date out
-    <input required type="date" name="dateOut">
-    <input type="submit" value="Book">
-</form>
+<c:choose>
+    <c:when test="${userRole.name == 'admin' }">
+        <table>
+            <tbody>
+            <c:forEach var="bill" items="${bills}">
+                <tr>
+                    <td>${bill.user.firstName}</td>
+                    <td>${bill.user.lastName}</td>
+                    <td>${bill.dateIn}</td>
+                    <td>${bill.dateOut}</td>
+                    <td>${bill.status}</td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </c:when>
+
+    <c:otherwise>
+        ${roomDesc}
+        <form id="room_description" action="controller" method="post">
+            <input type="hidden" name="command" value="bookRoom"/>
+            <input type="hidden" name="roomId" value="${roomId}">
+            Date in
+            <input required type="date" name="dateIn">
+            Date out
+            <input required type="date" name="dateOut">
+            <input type="submit" value="Book">
+        </form>
+    </c:otherwise>
+</c:choose>
 </body>
 </html>

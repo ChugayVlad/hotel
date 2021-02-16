@@ -10,4 +10,6 @@ public interface BillDao extends Dao<Bill>{
     List<Bill> getAllByDate(Long roomId, Date dateIn, Date dateOut) throws DAOException;
     List<Bill> getAllByUserId(Long id) throws DAOException;
     Bill getBillByParams(Bill bill) throws DAOException;
+
+    List<Bill> getBillByRoom(Long roomId) throws DAOException;
 }

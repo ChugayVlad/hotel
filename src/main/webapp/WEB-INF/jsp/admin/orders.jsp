@@ -21,9 +21,8 @@
         <th scope="col">Date in</th>
         <th scope="col">Date out</th>
         <th scope="col">Type</th>
-        <th scope="col">User id</th>
-        <th scope="col">Room id</th>
-        <th scope="col">BUTTON</th>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
     </tr>
     </thead>
     <tbody>
@@ -33,8 +32,8 @@
             <td>${order.dateIn}</td>
             <td>${order.dateOut}</td>
             <td>${order.type.name}</td>
-            <td>${order.userId}</td>
-            <td>${order.roomId}</td>
+            <td>${order.user.firstName}</td>
+            <td>${order.user.lastName}</td>
             <td>
                 <a href="controller?command=findRoomsForUser&orderId=${order.id}">Find rooms for user</a>
             </td>
