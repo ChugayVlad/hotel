@@ -1,41 +1,55 @@
-
 <%@ page import="com.my.entity.Role" %>
 <%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 
-<tr>
-    <td id="header">
-        <c:if test="${not empty user}">
-            <div id="leftHeader">
-                <c:choose>
-                    <c:when test="${userRole.name == 'admin' }">
-                        <a href="controller?command=showOrders">Orders</a> &nbsp;
-                        <a href="controller?command=showRooms">Manage rooms</a>
-                    </c:when>
+<fmt:setLocale value="${currentLocale}" scope="session"/>
+<fmt:setBundle basename="resources"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-                    <c:when test="${userRole.name == 'client'}">
-                        <a href="controller?command=showRooms&sortBy=price">Main page</a> &nbsp;
-                        <a href="controller?command=openPersonalAccount">Personal account</a> &nbsp;
-                    </c:when>
-                </c:choose>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <c:if test="${not empty user}">
+    <ul class="navbar-nav mr-auto">
+        <c:choose>
+            <c:when test="${userRole.name == 'admin' }">
+                <a href="controller?command=showOrders"><fmt:message key='header_jsp.admin.orders'/></a> &nbsp;
+                <a href="controller?command=showRooms"><fmt:message key='header_jsp.admin.manage_rooms'/></a>
+            </c:when>
 
-            </div>
-            <div id="rightHeader" >
-                <c:out value="${user.firstName} ${user.lastName}"/>
-                <c:if test="${not empty userRole}">
-                    <c:out value="(${userRole.name})"/>
-                </c:if>
-                <a href="controller?command=logout">
-                    Logout
-                </a>
-            </div>
-        </c:if>
+            <c:when test="${userRole.name == 'client'}">
+                <a href="controller?command=showRooms&sortBy=price"><fmt:message key='header_jsp.user.main_page'/></a> &nbsp;
+                <a href="controller?command=openPersonalAccount"><fmt:message key='header_jsp.user.personal_account'/>
+                </a> &nbsp;
+            </c:when>
+        </c:choose>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+        <form action="controller" method="post">
+            <input type="hidden" name="command" value="changeLanguage"/>
+            <li class="nav-item dropdown">
+                <select name="locale" onchange="this.form.submit()">
+                    <c:forEach items="${applicationScope.locales}" var="locale">
+                        <c:set var="selected" value="${locale.key == currentLocale ? 'selected' : '' }"/>
+                        <option value="${locale.key}" ${selected}>${locale.value}</option>
+                    </c:forEach>
+                </select>
+            </li>
+        </form>
+
+        <li class="nav-item">
+            <c:out value="${user.firstName} ${user.lastName}"/>
+            <c:if test="${not empty userRole}">
+                <c:out value="(${userRole.name})"/>
+            </c:if>
+            <a href="controller?command=logout">
+                <fmt:message key='header_jsp.logout'/>
+            </a>
+            </c:if>
+        </li>
 
         <c:if test="${empty user and title ne 'Login'}">
-            <div id="rightHeader">
-                <a href="controller?command=login">Login</a>
-            </div>
+            <a href="controller?command=login"><fmt:message key='login_jsp.form.submit_sign_in'/></a>
         </c:if>
-    </td>
-</tr>
+    </ul>
+</nav>
 

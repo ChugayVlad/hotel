@@ -13,6 +13,7 @@ import com.my.entity.RoomStatus;
 import com.my.exception.DAOException;
 import com.my.exception.ServiceException;
 import com.my.service.BillService;
+import com.my.util.Validator;
 import org.apache.log4j.Logger;
 
 import java.sql.Date;
@@ -36,13 +37,10 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void insertBill(Bill bill) throws ServiceException {
+        Validator.validateDate(bill.getDateIn(), bill.getDateOut());
+
         BillDao billDao;
         RoomDao roomDao;
-
-        LocalDate currentDate = LocalDate.now();
-        if (bill.getDateIn().compareTo(Date.valueOf(currentDate)) < 0 || bill.getDateOut().compareTo(Date.valueOf(currentDate)) < 0) {
-            throw new ServiceException("Date cannot be past!");
-        }
 
         try {
             daoFactory.beginTransaction();
@@ -52,7 +50,6 @@ public class BillServiceImpl implements BillService {
             if (!bills.isEmpty()) {
                 throw new ServiceException("Sorry, room is busy for these dates");
             }
-
 
             roomDao = daoFactory.getRoomDao();
             Room room = roomDao.get(bill.getRoomId());

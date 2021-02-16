@@ -1,6 +1,7 @@
 package com.my.command.admin;
 
 import com.my.command.Command;
+import com.my.command.util.PathUtil;
 import com.my.entity.Order;
 import com.my.entity.Role;
 import com.my.entity.Room;
@@ -26,6 +27,7 @@ public class ShowOrdersCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
+        PathUtil.saveCurrentPathToSession(request);
         HttpSession session = request.getSession();
 
         if (!Role.ADMIN.equals(session.getAttribute("userRole"))){

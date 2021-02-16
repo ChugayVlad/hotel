@@ -1,5 +1,6 @@
 package com.my.command;
 
+import com.my.command.util.PathUtil;
 import com.my.entity.Bill;
 import com.my.entity.Role;
 import com.my.entity.Room;
@@ -22,6 +23,7 @@ public class RoomDescriptionCommand implements Command{
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
+        PathUtil.saveCurrentPathToSession(request);
         HttpSession session = request.getSession();
         RoomService roomService = new RoomServiceImpl();
 

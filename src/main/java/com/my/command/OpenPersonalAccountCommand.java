@@ -1,5 +1,6 @@
 package com.my.command;
 
+import com.my.command.util.PathUtil;
 import com.my.entity.Bill;
 import com.my.entity.Order;
 import com.my.entity.User;
@@ -22,6 +23,7 @@ public class OpenPersonalAccountCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
+        PathUtil.saveCurrentPathToSession(request);
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         String to = request.getParameter("to");

@@ -1,5 +1,6 @@
 package com.my.command;
 
+import com.my.command.util.PathUtil;
 import com.my.entity.Room;
 import com.my.entity.RoomType;
 import com.my.exception.AppException;
@@ -22,6 +23,8 @@ public class ShowRoomsCommand implements Command{
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
+        PathUtil.saveCurrentPathToSession(request);
+
         RoomService roomService = new RoomServiceImpl();
 
         String paramPage = request.getParameter("page");

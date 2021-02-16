@@ -36,12 +36,6 @@ public class CreateOrderCommand implements Command {
         LocalDate dateIn = LocalDate.parse(request.getParameter("dateIn"));
         LocalDate dateOut = LocalDate.parse(request.getParameter("dateOut"));
 
-
-        LOG.trace(dateIn);
-        if (dateIn.compareTo(dateOut) > 0) {
-            throw new AppException("Arrival date cannot be less than departure date");
-        }
-
         order.setDateIn(Date.valueOf(dateIn));
         order.setDateOut(Date.valueOf(dateOut));
 

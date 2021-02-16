@@ -10,7 +10,6 @@
 <html>
 <head>
     <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 
 <body>
@@ -27,7 +26,7 @@
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
 
-        <button class="btn btn-lg btn-primary btn-block my-3" style="align-content: center" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block my-3" style="align-content: center" type="submit"><fmt:message key="login.jsp.form.submit_sign_in"/> </button>
     </form>
 
     <a href="controller?command=register">Sign up</a>

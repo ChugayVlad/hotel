@@ -11,6 +11,7 @@ import com.my.exception.AppException;
 import com.my.exception.DAOException;
 import com.my.exception.ServiceException;
 import com.my.service.OrderService;
+import com.my.util.Validator;
 import org.apache.log4j.Logger;
 
 import java.sql.Date;
@@ -34,10 +35,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void insertOrder(Order order) throws ServiceException {
         OrderDao orderDao;
-        LocalDate currentDate = LocalDate.now();
-        if (order.getDateIn().compareTo(Date.valueOf(currentDate)) < 0 || order.getDateOut().compareTo(Date.valueOf(currentDate)) < 0){
-            throw new ServiceException("Date cannot be past!");
-        }
+
+        Validator.validateDate(order.getDateIn(), order.getDateOut());
+
         try {
             daoFactory.open();
             orderDao = daoFactory.getOrderDao();

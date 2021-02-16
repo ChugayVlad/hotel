@@ -7,17 +7,19 @@
 <%@ attribute name="status" type="java.lang.String" required="false" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 
 <c:choose>
-    <c:when test="${page == 1}">Previous </c:when>
+    <c:when test="${page == 1}"><fmt:message key="pagination_tag.previous"/> </c:when>
     <c:otherwise>
-        <a href="${path}&pageSize=${pageSize}&page=${page-1}&sortBy=${sortBy}&status=${status}">Previous</a>
+        <a href="${path}&pageSize=${pageSize}&page=${page-1}&sortBy=${sortBy}&status=${status}"><fmt:message key="pagination_tag.previous"/></a>
     </c:otherwise>
 </c:choose>
 
 <c:choose>
-    <c:when test="${page == maxPage}">Next</c:when>
+    <c:when test="${page == maxPage}"><fmt:message key="pagination_tag.next"/></c:when>
     <c:otherwise>
-        <a href="${path}&pageSize=${pageSize}&page=${page+1}&sortBy=${sortBy}&status=${status}">Next</a>
+        <a href="${path}&pageSize=${pageSize}&page=${page+1}&sortBy=${sortBy}&status=${status}"><fmt:message key="pagination_tag.next"/></a>
     </c:otherwise>
 </c:choose>

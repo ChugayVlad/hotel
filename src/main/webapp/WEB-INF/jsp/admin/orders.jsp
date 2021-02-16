@@ -13,36 +13,39 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
-<table id="orders-list">
+<div class="container mx-xl-auto my-xl-5">
+    <table id="orders-list" class="table">
 
-    <thead>
-    <tr>
-        <th scope="col">Places</th>
-        <th scope="col">Date in</th>
-        <th scope="col">Date out</th>
-        <th scope="col">Type</th>
-        <th scope="col">First name</th>
-        <th scope="col">Last name</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach var="order" items="${orders}">
+        <thead class="bg-dark">
         <tr>
-            <td>${order.places}</td>
-            <td>${order.dateIn}</td>
-            <td>${order.dateOut}</td>
-            <td>${order.type.name}</td>
-            <td>${order.user.firstName}</td>
-            <td>${order.user.lastName}</td>
-            <td>
-                <a href="controller?command=findRoomsForUser&orderId=${order.id}">Find rooms for user</a>
-            </td>
+            <th scope="col">Places</th>
+            <th scope="col">Date in</th>
+            <th scope="col">Date out</th>
+            <th scope="col">Type</th>
+            <th scope="col">First name</th>
+            <th scope="col">Last name</th>
+            <th></th>
         </tr>
-    </c:forEach>
-    </tbody>
-</table>
-<c:if test="${not empty message}">${message}</c:if>
+        </thead>
+        <tbody>
+        <c:forEach var="order" items="${orders}">
+            <tr>
+                <td>${order.places}</td>
+                <td>${order.dateIn}</td>
+                <td>${order.dateOut}</td>
+                <td>${order.type.name}</td>
+                <td>${order.user.firstName}</td>
+                <td>${order.user.lastName}</td>
+                <td>
+                    <a href="controller?command=findRoomsForUser&orderId=${order.id}">Find rooms for user</a>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+    <c:if test="${not empty message}">${message}</c:if>
 
-<util:pagination path="controller?command=showOrders" page="${page}" pageSize="${pageSize}" maxPage="${maxPage}"/>
+    <util:pagination path="controller?command=showOrders" page="${page}" pageSize="${pageSize}" maxPage="${maxPage}"/>
+</div>
 </body>
 </html>

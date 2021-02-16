@@ -1,5 +1,6 @@
 package com.my.command;
 
+import com.my.command.util.PathUtil;
 import com.my.controller.Direction;
 import com.my.entity.Role;
 import com.my.entity.User;
@@ -19,7 +20,7 @@ public class RegisterClientCommand implements Command{
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
-
+        PathUtil.saveCurrentPathToSession(request);
         if ("GET".equals(request.getMethod())){
             return Path.PAGE_REGISTRATION;
         }
