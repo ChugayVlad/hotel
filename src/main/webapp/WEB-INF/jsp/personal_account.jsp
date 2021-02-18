@@ -10,12 +10,14 @@
 <html>
 <head>
     <title><fmt:message key="personal_account_jsp.title"/></title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
+
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 
-<div class="d-flex" id="wrapper">
-    <div class="bg-light border-right" id="sidebar-wrapper">
+<div class="d-flex h-100 wrapper" id="wrapper">
+    <div class="bg-light border-right h-100 aside" id="sidebar-wrapper">
         <div class="list-group list-group-flush">
             <a href="controller?command=openPersonalAccount&to=info"
                class="list-group-item list-group-item-action bg-light"><fmt:message
@@ -31,7 +33,7 @@
         </div>
     </div>
 
-    <div class="container-fluid">
+    <div class="container-fluid p-3 justify-center main">
         <c:choose>
             <c:when test="${to=='orders'}">
                 <hr>
@@ -112,15 +114,27 @@
                 </table>
             </c:when>
             <c:when test="${to=='info'}">
-                <form action="controller" method="post">
+                <form action="controller" method="post"
+                      class="d-flex flex-column justify-content-around align-items-center form"
+                >
+
                     <input type="hidden" name="command" value="editUser"/>
-                    <fmt:message key="authorization.email"/>
-                    <input type="text" name="email" value="${user.email}">
-                    <fmt:message key="authorization.first_name"/>
-                    <input type="text" name="firstName" value="${user.firstName}">
-                    <fmt:message key="authorization.last_name"/>
-                    <input type="text" name="lastName" value="${user.lastName}">
-                    <input type="submit" value="<fmt:message key="personal_account_jsp.form.submit_edit"/>">
+                    <div class="form-item">
+                        <fmt:message key="authorization.email"/>
+                        <input type="text" name="email" value="${user.email}">
+                    </div>
+                    <div class="form-item">
+                        <fmt:message key="authorization.first_name"/>
+                        <input type="text" name="firstName" value="${user.firstName}">
+                    </div>
+                    <div class="form-item">
+                        <fmt:message key="authorization.last_name"/>
+                        <input type="text" name="lastName" value="${user.lastName}">
+                    </div>
+                    <div>
+                        <input type="submit" class="btn btn-primary" style="width: 150px;"
+                               value="<fmt:message key="personal_account_jsp.form.submit_edit"/>">
+                    </div>
                 </form>
             </c:when>
         </c:choose>

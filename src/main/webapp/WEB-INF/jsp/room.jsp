@@ -32,6 +32,9 @@
 
     <c:otherwise>
         ${roomDesc}
+
+        <img src="${pageContext.servletContext.contextPath}/images/${image}"/>
+
         <form id="room_description" action="controller" method="post">
             <input type="hidden" name="command" value="bookRoom"/>
             <input type="hidden" name="roomId" value="${roomId}">

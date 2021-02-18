@@ -41,7 +41,6 @@
                         <c:forEach items="${applicationScope.locales}" var="locale">
                             <c:set var="selected" value="${locale.key == currentLocale ? 'selected' : '' }"/>
                             <option value="${locale.key}" ${selected}>${locale.value}</option>
-
                         </c:forEach>
                     </select>
                 </form>
