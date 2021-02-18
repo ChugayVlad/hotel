@@ -10,6 +10,7 @@ import com.my.entity.RoomStatus;
 import com.my.exception.AppException;
 import com.my.exception.DAOException;
 import com.my.exception.ServiceException;
+import com.my.exception.ValidationException;
 import com.my.service.OrderService;
 import com.my.util.Validator;
 import org.apache.log4j.Logger;
@@ -33,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void insertOrder(Order order) throws ServiceException {
+    public void insertOrder(Order order) throws ServiceException, ValidationException {
         OrderDao orderDao;
 
         Validator.validateDate(order.getDateIn(), order.getDateOut());

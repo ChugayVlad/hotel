@@ -5,6 +5,7 @@ import com.my.controller.Direction;
 import com.my.entity.Role;
 import com.my.entity.User;
 import com.my.exception.AppException;
+import com.my.exception.ValidationException;
 import com.my.service.UserService;
 import com.my.service.impl.UserServiceImpl;
 import com.my.util.Path;
@@ -14,14 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class RegisterClientCommand implements Command{
+public class RegisterClientCommand implements Command {
     private static final Logger LOG = Logger.getLogger(RegisterClientCommand.class);
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
+        HttpSession session = request.getSession();
         PathUtil.saveCurrentPathToSession(request);
-        if ("GET".equals(request.getMethod())){
+        if ("GET".equals(request.getMethod())) {
             return Path.PAGE_REGISTRATION;
         }
 
@@ -39,9 +41,9 @@ public class RegisterClientCommand implements Command{
         user.setRoleId(1);
 
         userService.insertUser(user);
+
         LOG.info("Register new user --> " + user);
 
-        HttpSession session = request.getSession();
         session.setAttribute("user", userService.findUser(email, password));
         LOG.trace("Set the session attribute: user --> " + user);
 

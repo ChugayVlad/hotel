@@ -6,50 +6,67 @@
 <fmt:setBundle basename="resources"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <c:if test="${not empty user}">
-    <ul class="navbar-nav mr-auto">
-        <c:choose>
-            <c:when test="${userRole.name == 'admin' }">
-                <a href="controller?command=showOrders"><fmt:message key='header_jsp.admin.orders'/></a> &nbsp;
-                <a href="controller?command=showRooms"><fmt:message key='header_jsp.admin.manage_rooms'/></a>
-            </c:when>
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <div class="collapse navbar-collapse">
+        <c:if test="${not empty user}">
+        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <c:choose>
+                <c:when test="${userRole.name == 'admin' }">
+                    <li class="nav-item">
+                        <a href="controller?command=showOrders" class="nav-link"><fmt:message
+                                key='header_jsp.admin.orders'/></a> &nbsp;
+                    </li>
+                    <li class="nav-item">
+                        <a href="controller?command=showRooms" class="nav-link"><fmt:message
+                                key='header_jsp.admin.manage_rooms'/></a>
+                    </li>
+                </c:when>
 
-            <c:when test="${userRole.name == 'client'}">
-                <a href="controller?command=showRooms&sortBy=price"><fmt:message key='header_jsp.user.main_page'/></a> &nbsp;
-                <a href="controller?command=openPersonalAccount"><fmt:message key='header_jsp.user.personal_account'/>
-                </a> &nbsp;
-            </c:when>
-        </c:choose>
-    </ul>
+                <c:when test="${userRole.name == 'client'}">
+                    <li class="nav-item">
+                        <a href="controller?command=showRooms&sortBy=price" class="nav-link"><fmt:message
+                                key='header_jsp.user.main_page'/></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="controller?command=openPersonalAccount" class="nav-link"><fmt:message
+                                key='header_jsp.user.personal_account'/></a>
+                    </li>
+                </c:when>
+            </c:choose>
+            <li class="nav-item">
+                <form action="controller" method="post">
+                    <input type="hidden" name="command" value="changeLanguage"/>
 
-    <ul class="navbar-nav ml-auto">
-        <form action="controller" method="post">
-            <input type="hidden" name="command" value="changeLanguage"/>
-            <li class="nav-item dropdown">
-                <select name="locale" onchange="this.form.submit()">
-                    <c:forEach items="${applicationScope.locales}" var="locale">
-                        <c:set var="selected" value="${locale.key == currentLocale ? 'selected' : '' }"/>
-                        <option value="${locale.key}" ${selected}>${locale.value}</option>
-                    </c:forEach>
-                </select>
+                    <select class="nav-link" name="locale" onchange="this.form.submit()">
+                        <c:forEach items="${applicationScope.locales}" var="locale">
+                            <c:set var="selected" value="${locale.key == currentLocale ? 'selected' : '' }"/>
+                            <option value="${locale.key}" ${selected}>${locale.value}</option>
+
+                        </c:forEach>
+                    </select>
+                </form>
             </li>
-        </form>
+            <li class="nav-item">
+                <li class="nav-link">
+                    <c:out value="${user.firstName} ${user.lastName}"/>
+                    <c:if test="${not empty userRole}">
+                        <c:out value="(${userRole.name})"/>
+                    </c:if>
+                </li>
+            </li>
 
-        <li class="nav-item">
-            <c:out value="${user.firstName} ${user.lastName}"/>
-            <c:if test="${not empty userRole}">
-                <c:out value="(${userRole.name})"/>
-            </c:if>
-            <a href="controller?command=logout">
-                <fmt:message key='header_jsp.logout'/>
-            </a>
-            </c:if>
-        </li>
+            <li class="nav-item">
+                <a href="controller?command=logout" class="nav-link">
+                    <fmt:message key='header_jsp.logout'/>
+                </a>
+                </c:if>
 
-        <c:if test="${empty user and title ne 'Login'}">
-            <a href="controller?command=login"><fmt:message key='login_jsp.form.submit_sign_in'/></a>
-        </c:if>
-    </ul>
+                <c:if test="${empty user and title ne 'Login'}">
+                    <a href="controller?command=login" class="nav-link"><fmt:message
+                            key='login_jsp.form.submit_sign_in'/></a>
+                </c:if>
+            </li>
+        </ul>
+    </div>
 </nav>
 

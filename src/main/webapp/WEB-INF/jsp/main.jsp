@@ -41,6 +41,9 @@
             </select>
             <button type="submit" class="btn btn-primary form-inline"><fmt:message key="main_jsp.form.submit_order"/></button>
         </form>
+
+        ${message}
+
     </c:if>
 
     <form id="sort" action="controller" method="get">
@@ -83,6 +86,7 @@
             <th scope="col"><fmt:message key="main_jsp.table.type"/></th>
             <th scope="col"><fmt:message key="main_jsp.table.places"/></th>
             <th scope="col"><fmt:message key="main_jsp.table.price"/></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -105,6 +109,5 @@
         </ul>
     </nav>
 </div>
-
 </body>
 </html>

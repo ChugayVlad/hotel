@@ -12,6 +12,7 @@ import com.my.entity.Room;
 import com.my.entity.RoomStatus;
 import com.my.exception.DAOException;
 import com.my.exception.ServiceException;
+import com.my.exception.ValidationException;
 import com.my.service.BillService;
 import com.my.util.Validator;
 import org.apache.log4j.Logger;
@@ -36,7 +37,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public void insertBill(Bill bill) throws ServiceException {
+    public void insertBill(Bill bill) throws ServiceException, ValidationException {
         Validator.validateDate(bill.getDateIn(), bill.getDateOut());
 
         BillDao billDao;
@@ -46,9 +47,8 @@ public class BillServiceImpl implements BillService {
             daoFactory.beginTransaction();
             billDao = daoFactory.getBillDao();
             List<Bill> bills = billDao.getAllByDate(bill.getRoomId(), bill.getDateIn(), bill.getDateOut());
-
             if (!bills.isEmpty()) {
-                throw new ServiceException("Sorry, room is busy for these dates");
+                throw new ValidationException("Sorry, room is busy for these dates");
             }
 
             roomDao = daoFactory.getRoomDao();
@@ -149,7 +149,9 @@ public class BillServiceImpl implements BillService {
             if (billToDelete.getStatus() == (BillStatus.NOT_PAID)) {
                 LOG.trace("Delete bill with id -->> " + billToDelete.getId());
                 billDao.delete(billToDelete.getId());
-                roomDao.updateStatus(RoomStatus.VACANT, bill.getRoomId());
+                if(billDao.getBillByRoom(bill.getRoomId()).isEmpty()){
+                    roomDao.updateStatus(RoomStatus.VACANT, bill.getRoomId());
+                }
             }
             daoFactory.commitTransaction();
         } catch (DAOException e) {

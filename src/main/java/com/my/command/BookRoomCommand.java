@@ -8,6 +8,7 @@ import com.my.entity.RoomStatus;
 import com.my.entity.User;
 import com.my.exception.AppException;
 import com.my.exception.ServiceException;
+import com.my.exception.ValidationException;
 import com.my.service.BillService;
 import com.my.service.OrderService;
 import com.my.service.RoomService;
@@ -33,10 +34,6 @@ public class BookRoomCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
         HttpSession session = request.getSession();
-
-        if (session.getAttribute("user") == null) {
-            return Path.COMMAND_LOGIN;
-        }
 
         BillService billService = new BillServiceImpl();
         RoomService roomService = new RoomServiceImpl();
@@ -66,7 +63,12 @@ public class BookRoomCommand implements Command {
             bill.setSum(order.getSum());
             billService.insertBillWithOrder(bill, orderId);
         } else {
-            billService.insertBill(bill);
+            try {
+                billService.insertBill(bill);
+            } catch (ValidationException e){
+                String message = "&message=" + e.getMessage();
+                return session.getAttribute("prevPath") + message;
+            }
         }
 
         Timer timer = new Timer();

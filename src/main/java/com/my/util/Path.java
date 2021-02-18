@@ -15,7 +15,7 @@ public final class Path {
     public static final String COMMAND_ERROR_PAGE = "controller?command=error";
     public static final String COMMAND_SHOW_ROOMS = "controller?command=showRooms&sortBy=price";
     public static final String COMMAND_OPEN_SUCCESS = "controller?command=successOrder";
-    public static final String COMMAND_OPEN_PERSONAL_ACCOUNT = "controller?command=openPersonalAccount";
+    public static final String COMMAND_OPEN_PERSONAL_ACCOUNT = "controller?command=openPersonalAccount&to=orders";
     public static final String COMMAND_LOGIN = "controller?command=login";
     public static final String COMMAND_SHOW_ORDERS = "controller?command=showOrders";
 }

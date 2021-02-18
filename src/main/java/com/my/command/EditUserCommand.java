@@ -33,6 +33,6 @@ public class EditUserCommand implements Command{
         session.setAttribute("user", user);
         request.setAttribute("to", "info");
         LOG.debug("Command finished");
-        return Path.COMMAND_OPEN_PERSONAL_ACCOUNT;
+        return (String) session.getAttribute("prevPath");
     }
 }

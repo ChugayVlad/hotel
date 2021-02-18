@@ -39,6 +39,8 @@ public class RoomDescriptionCommand implements Command{
             Room room = roomService.getRoomById(roomId);
             request.setAttribute("roomDesc", room.getDescription());
         }
+
+        request.setAttribute("message", request.getParameter("message"));
         LOG.debug("Command finished");
         return Path.PAGE_ROOM_DESCRIPTION;
     }

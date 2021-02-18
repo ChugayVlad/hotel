@@ -25,10 +25,6 @@ public class FindRoomsCommand implements Command {
         LOG.debug("Command starts");
         HttpSession session = request.getSession();
 
-        if (!Role.ADMIN.equals(session.getAttribute("userRole"))){
-            throw new AppException("You dont have permissions!!!");
-        }
-
         Long orderId = Long.parseLong(request.getParameter("orderId"));
 
         OrderService orderService = new OrderServiceImpl();

@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class PayCommand implements Command{
     private static final Logger LOG = Logger.getLogger(PayCommand.class);
@@ -17,6 +18,7 @@ public class PayCommand implements Command{
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
+        HttpSession session = request.getSession();
         String money = request.getParameter("money");
         String sum = request.getParameter("sum");
         if (Double.parseDouble(sum) != Double.parseDouble(money)){
@@ -29,6 +31,6 @@ public class PayCommand implements Command{
         billService.updateStatus(bill);
 
         LOG.debug("Command finished");
-        return Path.COMMAND_OPEN_PERSONAL_ACCOUNT;
+        return (String) session.getAttribute("prevPath");
     }
 }

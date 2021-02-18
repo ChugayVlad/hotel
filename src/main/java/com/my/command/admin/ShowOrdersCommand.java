@@ -30,9 +30,9 @@ public class ShowOrdersCommand implements Command {
         PathUtil.saveCurrentPathToSession(request);
         HttpSession session = request.getSession();
 
-        if (!Role.ADMIN.equals(session.getAttribute("userRole"))){
+        /*if (!Role.ADMIN.equals(session.getAttribute("userRole"))){
             throw new AppException("You dont have permissions!!!");
-        }
+        }*/
 
         String paramPage = request.getParameter("page");
         String paramPageSize = request.getParameter("pageSize");

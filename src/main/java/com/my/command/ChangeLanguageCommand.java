@@ -20,8 +20,6 @@ public class ChangeLanguageCommand implements Command{
         session.setAttribute("currentLocale", locale);
         LOG.debug("Command finished");
 
-        String prevPath = (String) session.getAttribute("prevPath");
-
-        return prevPath;
+        return (String) session.getAttribute("prevPath");
     }
 }

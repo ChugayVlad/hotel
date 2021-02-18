@@ -21,22 +21,16 @@ public class LoginCommand implements Command {
         LOG.debug("Command starts");
         HttpSession session = request.getSession();
 
-        if(session.getAttribute("user") != null){
-            return Path.COMMAND_SHOW_ROOMS;
-        }
-
         if ("GET".equals(request.getMethod())){
             return Path.PAGE_LOGIN;
         }
 
         UserService service = new UserServiceImpl();
 
-
         String email = request.getParameter("email");
         LOG.trace("Request parameter: email --> " + email);
         String password = request.getParameter("password");
 
-        //String forward = Path.COMMAND_ERROR_PAGE;
         String path = null;
         User user = service.findUser(email, password);
 
@@ -59,7 +53,6 @@ public class LoginCommand implements Command {
         LOG.info("User " + user + " logged as " + userRole.toString().toLowerCase());
 
         LOG.debug("Command finished");
-
         return path;
     }
 }

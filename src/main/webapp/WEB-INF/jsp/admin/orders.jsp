@@ -16,14 +16,14 @@
 <div class="container mx-xl-auto my-xl-5">
     <table id="orders-list" class="table">
 
-        <thead class="bg-dark">
+        <thead class="bg-light">
         <tr>
-            <th scope="col">Places</th>
-            <th scope="col">Date in</th>
-            <th scope="col">Date out</th>
-            <th scope="col">Type</th>
-            <th scope="col">First name</th>
-            <th scope="col">Last name</th>
+            <th scope="col"><fmt:message key="main_jsp.table.places"/> </th>
+            <th scope="col"><fmt:message key="main_jsp.form.date_in"/> </th>
+            <th scope="col"><fmt:message key="main_jsp.form.date_out"/> </th>
+            <th scope="col"><fmt:message key="main_jsp.table.type"/> </th>
+            <th scope="col"><fmt:message key="authorization.first_name"/></th>
+            <th scope="col"><fmt:message key="authorization.last_name"/></th>
             <th></th>
         </tr>
         </thead>
@@ -37,7 +37,7 @@
                 <td>${order.user.firstName}</td>
                 <td>${order.user.lastName}</td>
                 <td>
-                    <a href="controller?command=findRoomsForUser&orderId=${order.id}">Find rooms for user</a>
+                    <a href="controller?command=findRoomsForUser&orderId=${order.id}"><fmt:message key="orders_jsp.table.href.find_rooms"/> </a>
                 </td>
             </tr>
         </c:forEach>

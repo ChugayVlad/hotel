@@ -4,6 +4,7 @@ import com.my.entity.Order;
 import com.my.entity.RoomType;
 import com.my.entity.User;
 import com.my.exception.AppException;
+import com.my.exception.ValidationException;
 import com.my.service.OrderService;
 import com.my.service.RoomTypeService;
 import com.my.service.impl.OrderServiceImpl;
@@ -25,11 +26,6 @@ public class CreateOrderCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
         HttpSession session = request.getSession();
-
-        if (session.getAttribute("user") == null){
-            return Path.COMMAND_LOGIN;
-        }
-
         OrderService orderService;
         Order order = new Order();
         order.setPlaces(Integer.parseInt(request.getParameter("places")));
@@ -47,8 +43,15 @@ public class CreateOrderCommand implements Command {
         User user = (User) session.getAttribute("user");
         order.setUser(user);
         orderService = new OrderServiceImpl();
-        orderService.insertOrder(order);
 
-        return Path.COMMAND_OPEN_SUCCESS;
+
+        String message = "&message=";
+        try {
+            orderService.insertOrder(order);
+            message +=  "Order done, thank you";
+        }catch (ValidationException e){
+            message += e.getMessage();
+        }
+        return Path.COMMAND_SHOW_ROOMS + message;
     }
 }

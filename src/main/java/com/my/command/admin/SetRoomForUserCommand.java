@@ -20,14 +20,7 @@ public class SetRoomForUserCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
         HttpSession session = request.getSession();
-        if (!Role.ADMIN.equals(session.getAttribute("userRole"))){
-            throw new AppException("You dont have permissions!!!");
-        }
-
-        OrderService orderService = new OrderServiceImpl();/*
-        Order order = orderService.getById(Long.valueOf(request.getParameter("orderId")));
-        order.setRoomId(Long.valueOf(request.getParameter("roomId")));*/
-
+        OrderService orderService = new OrderServiceImpl();
         orderService.setRoom(Long.valueOf(request.getParameter("orderId")), Long.valueOf(request.getParameter("roomId")));
 
         request.setAttribute("message", "Request sent to user");

@@ -35,13 +35,14 @@
         <form id="room_description" action="controller" method="post">
             <input type="hidden" name="command" value="bookRoom"/>
             <input type="hidden" name="roomId" value="${roomId}">
-            Date in
+            <fmt:message key="main_jsp.form.date_in"/>
             <input required type="date" name="dateIn">
-            Date out
+            <fmt:message key="main_jsp.form.date_out"/>
             <input required type="date" name="dateOut">
-            <input type="submit" value="Book">
+            <input type="submit" value="<fmt:message key="room_jsp.form_submit_book"/>">
         </form>
     </c:otherwise>
 </c:choose>
+${message}
 </body>
 </html>

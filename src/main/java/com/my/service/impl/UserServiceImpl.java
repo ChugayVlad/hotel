@@ -8,7 +8,10 @@ import com.my.exception.AppException;
 import com.my.exception.DAOException;
 import com.my.exception.Messages;
 import com.my.exception.ServiceException;
+import com.my.exception.ValidationException;
 import com.my.service.UserService;
+import com.my.util.PasswordHashing;
+import com.my.util.Validator;
 import org.apache.log4j.Logger;
 
 import java.sql.SQLException;
@@ -39,7 +42,8 @@ public class UserServiceImpl implements UserService {
             userDao = daoFactory.getUserDao();
             user = userDao.getUserByEmail(email);
             LOG.trace("Found in DB: user --> " + user);
-            if (user == null || !password.equals(user.getPassword())) {
+            String incomingPass = PasswordHashing.hash(password);
+            if (user == null || !incomingPass.equals(user.getPassword())) {
                 throw new ServiceException("Cannot find user with such login/password");
             }
         } catch (DAOException e) {
@@ -52,11 +56,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void insertUser(User user) throws ServiceException {
+    public void insertUser(User user) throws ServiceException, ValidationException {
+        Validator.validateUser(user);
+
         UserDao userDao;
         try {
             daoFactory.open();
             userDao = daoFactory.getUserDao();
+            user.setPassword(PasswordHashing.hash(user.getPassword()));
             userDao.insert(user);
         } catch (DAOException e) {
             LOG.error(Messages.ERR_CANNOT_CREATE_USER, e);
