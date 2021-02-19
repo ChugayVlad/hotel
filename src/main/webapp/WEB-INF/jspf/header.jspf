@@ -6,8 +6,8 @@
 <fmt:setBundle basename="resources"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-    <div class="collapse navbar-collapse">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+    <div class="collapse navbar-collapse d-flex justify-content-end">
         <c:if test="${not empty user}">
         <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
             <c:choose>
@@ -37,7 +37,7 @@
                 <form action="controller" method="post">
                     <input type="hidden" name="command" value="changeLanguage"/>
 
-                    <select class="nav-link" name="locale" onchange="this.form.submit()">
+                    <select class="form-select" name="locale" onchange="this.form.submit()">
                         <c:forEach items="${applicationScope.locales}" var="locale">
                             <c:set var="selected" value="${locale.key == currentLocale ? 'selected' : '' }"/>
                             <option value="${locale.key}" ${selected}>${locale.value}</option>

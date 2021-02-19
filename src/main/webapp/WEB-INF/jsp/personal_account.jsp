@@ -19,10 +19,6 @@
 <div class="d-flex h-100 wrapper" id="wrapper">
     <div class="bg-light border-right h-100 aside" id="sidebar-wrapper">
         <div class="list-group list-group-flush">
-            <a href="controller?command=openPersonalAccount&to=info"
-               class="list-group-item list-group-item-action bg-light"><fmt:message
-                    key="personal_account_jsp.href.personal_information"/></a>
-
             <a href="controller?command=openPersonalAccount&to=orders"
                class="list-group-item list-group-item-action bg-light"><fmt:message
                     key="personal_account_jsp.href.orders"/></a>
@@ -30,16 +26,16 @@
             <a href="controller?command=openPersonalAccount&to=bills"
                class="list-group-item list-group-item-action bg-light"><fmt:message
                     key="personal_account_jsp.href.bills"/></a>
+
+            <a href="controller?command=openPersonalAccount&to=info"
+               class="list-group-item list-group-item-action bg-light"><fmt:message
+                    key="personal_account_jsp.href.personal_information"/></a>
         </div>
     </div>
 
     <div class="container-fluid p-3 justify-center main">
         <c:choose>
             <c:when test="${to=='orders'}">
-                <hr>
-                <fmt:message key="personal_account_jsp.href.orders"/>
-                <hr>
-
                 <table id="orders-list" class="table">
                     <thead>
                     <tr>
@@ -48,6 +44,7 @@
                         <th scope="col"><fmt:message key="main_jsp.form.date_out"/></th>
                         <th scope="col"><fmt:message key="main_jsp.table.type"/></th>
                         <th scope="col"><fmt:message key="personal_account_jsp.table.sum"/></th>
+                        <th scope="col"></th>
                         <th scope="col"></th>
                     </tr>
                     </thead>
@@ -68,7 +65,7 @@
                                     <input type="hidden" name="dateIn" value="${order.dateIn}">
                                     <input type="hidden" name="dateOut" value="${order.dateOut}">
                                     <c:if test="${order.roomId ne 0}">
-                                        <input type="submit"
+                                        <input class="btn btn-dark" type="submit"
                                                value="<fmt:message key="personal_account_jsp.order.accept"/>">
                                     </c:if>
                                 </form>
@@ -77,7 +74,7 @@
                                 <form id="cancel-form" action="controller" method="post">
                                     <input type="hidden" name="command" value="cancelOrder"/>
                                     <input type="hidden" name="orderId" value="${order.id}">
-                                    <input type="submit" value="<fmt:message key="personal_account_jsp.order.cancel"/>">
+                                    <input class="btn btn-close" type="submit">
                                 </form>
                             </td>
                         </tr>
@@ -87,9 +84,7 @@
                 </table>
             </c:when>
             <c:when test="${to == 'bills'}">
-                <hr>
-                <fmt:message key="personal_account_jsp.href.bills"/>
-                <hr>
+
                 <table id="bills-list" class="table">
                     <tbody>
                     <c:forEach var="bill" items="${bills}">
@@ -104,7 +99,7 @@
                                 <td>${bill.status}</td>
                                 <c:if test="${bill.status == 'NOT_PAID'}">
                                     <td><input type="text" name="money"></td>
-                                    <td><input type="submit" value="<fmt:message key="personal_account_jsp.bill.pay"/>">
+                                    <td><input class="btn btn-outline-primary" type="submit" value="<fmt:message key="personal_account_jsp.bill.pay"/>">
                                     </td>
                                 </c:if>
                             </tr>

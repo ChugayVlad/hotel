@@ -14,9 +14,9 @@
 <body>
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 <div class="container mx-xl-auto my-xl-5">
-    <table id="orders-list" class="table">
+    <table id="orders-list" class="table table-hover orders-table">
 
-        <thead class="bg-light">
+        <thead class="table-dark">
         <tr>
             <th scope="col"><fmt:message key="main_jsp.table.places"/> </th>
             <th scope="col"><fmt:message key="main_jsp.form.date_in"/> </th>

@@ -10,6 +10,10 @@
     flex: 0.8;
 }
 
+.table-row {
+    max-height: 40px;
+}
+
 .justify-center {
     display: flex;
     justify-content: center;
@@ -24,6 +28,44 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width:100%;
+    width: 100%;
     height: 60px;
 }
+
+
+.order-wrapper {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top:20px;
+}
+
+.order-form {
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    min-height: 70px;
+    max-height: 100px;
+}
+
+.order-form-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 70px;
+    width: 190px;
+}
+
+.order-submit {
+    height: 38px;
+    align-self: flex-end;
+}
+
+.orders-table {
+    min-height: 190px;
+    max-height: 400px;
+}
+
