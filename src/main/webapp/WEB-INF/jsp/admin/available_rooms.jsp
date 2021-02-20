@@ -13,31 +13,31 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
-<table id="rooms-list">
+<div class="container mx-xl-auto my-xl-5">
+    <table id="rooms-list" class="table">
 
-    <thead>
-    <tr>
-        <th scope="col">Type</th>
-        <th scope="col">Places</th>
-        <th scope="col">Price</th>
-        <th scope="col">Status</th>
-        <th scope="col">BUTTON</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach var="room" items="${rooms}">
+        <thead class="thead-dark">
         <tr>
-            <td>${room.type}</td>
-
-            <td>${room.places}</td>
-            <td>${room.price}</td>
-            <td>${room.status}</td>
-            <td>
-                <a href="controller?command=setRoom&roomId=${room.id}&orderId=${orderId}">Set room</a>
-            </td>
+            <th scope="col"><fmt:message key="main_jsp.table.type"/></th>
+            <th scope="col"><fmt:message key="main_jsp.table.places"/></th>
+            <th scope="col"><fmt:message key="main_jsp.table.price"/></th>
+            <th scope="col"></th>
         </tr>
-    </c:forEach>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        <c:forEach var="room" items="${rooms}">
+            <tr>
+                <td>${room.type}</td>
+                <td>${room.places}</td>
+                <td>${room.price}$</td>
+                <td>
+                    <a href="controller?command=setRoom&roomId=${room.id}&orderId=${orderId}"><fmt:message
+                            key="available_rooms_jsp.set_room"/></a>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

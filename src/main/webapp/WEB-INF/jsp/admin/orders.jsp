@@ -9,6 +9,7 @@
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 <html>
 <head>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <title>Orders</title>
 </head>
 <body>
@@ -18,10 +19,10 @@
 
         <thead class="table-dark">
         <tr>
-            <th scope="col"><fmt:message key="main_jsp.table.places"/> </th>
-            <th scope="col"><fmt:message key="main_jsp.form.date_in"/> </th>
-            <th scope="col"><fmt:message key="main_jsp.form.date_out"/> </th>
-            <th scope="col"><fmt:message key="main_jsp.table.type"/> </th>
+            <th scope="col"><fmt:message key="main_jsp.table.places"/></th>
+            <th scope="col"><fmt:message key="main_jsp.form.date_in"/></th>
+            <th scope="col"><fmt:message key="main_jsp.form.date_out"/></th>
+            <th scope="col"><fmt:message key="main_jsp.table.type"/></th>
             <th scope="col"><fmt:message key="authorization.first_name"/></th>
             <th scope="col"><fmt:message key="authorization.last_name"/></th>
             <th></th>
@@ -37,7 +38,8 @@
                 <td>${order.user.firstName}</td>
                 <td>${order.user.lastName}</td>
                 <td>
-                    <a href="controller?command=findRoomsForUser&orderId=${order.id}"><fmt:message key="orders_jsp.table.href.find_rooms"/> </a>
+                    <a href="controller?command=findRoomsForUser&orderId=${order.id}"><fmt:message
+                            key="orders_jsp.table.href.find_rooms"/> </a>
                 </td>
             </tr>
         </c:forEach>
@@ -45,7 +47,10 @@
     </table>
     <c:if test="${not empty message}">${message}</c:if>
 
-    <util:pagination path="controller?command=showOrders" page="${page}" pageSize="${pageSize}" maxPage="${maxPage}"/>
+    <div class="justify-center mb-5">
+        <util:pagination path="controller?command=showOrders" page="${page}" pageSize="${pageSize}"
+                         maxPage="${maxPage}"/>
+    </div>
 </div>
 </body>
 </html>

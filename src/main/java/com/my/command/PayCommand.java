@@ -21,6 +21,7 @@ public class PayCommand implements Command{
         HttpSession session = request.getSession();
         String money = request.getParameter("money");
         String sum = request.getParameter("sum");
+
         if (Double.parseDouble(sum) != Double.parseDouble(money)){
             throw new AppException("The entered amount does not match the specified.");
         }

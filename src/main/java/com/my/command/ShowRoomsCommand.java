@@ -20,7 +20,7 @@ public class ShowRoomsCommand implements Command{
     private static final String DEFAULT_ORDER = "ASC";
     private static final String DEFAULT_SORT = "price";
     private static final int FIRST_PAGE = 1;
-    private static final int DEFAULT_PAGE_SIZE = 4;
+    private static final int DEFAULT_PAGE_SIZE = 3;
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
