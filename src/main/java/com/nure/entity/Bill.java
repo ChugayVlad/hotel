@@ -1,6 +1,7 @@
 package com.nure.entity;
 
 import java.sql.Date;
+import java.util.Objects;
 
 public class Bill extends Entity{
     private Double sum;
@@ -68,5 +69,23 @@ public class Bill extends Entity{
                 ", dateOut=" + dateOut +
                 ", status=" + status +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bill bill = (Bill) o;
+        return Objects.equals(sum, bill.sum) &&
+                Objects.equals(user, bill.user) &&
+                Objects.equals(roomId, bill.roomId) &&
+                Objects.equals(dateIn, bill.dateIn) &&
+                Objects.equals(dateOut, bill.dateOut) &&
+                status == bill.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sum, user, roomId, dateIn, dateOut, status);
     }
 }

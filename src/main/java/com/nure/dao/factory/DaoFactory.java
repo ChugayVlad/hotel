@@ -18,9 +18,6 @@ public abstract class DaoFactory {
     public abstract RoomDao getRoomDao();
     public abstract RoomTypeDao getRoomTypeDao();
 
-    //abstract void closeConnection();
-
-
     public abstract void open() throws DAOException;
 
     /**

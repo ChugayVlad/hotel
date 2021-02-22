@@ -216,6 +216,7 @@ public class BillDaoMysql implements BillDao {
         user.setId(rs.getLong("user_id"));
         user.setFirstName(rs.getString("first_name"));
         user.setLastName(rs.getString("last_name"));
+        user.setEmail(rs.getString("email"));
         bill.setId(rs.getLong("id"));
         bill.setSum(rs.getDouble("sum"));
         bill.setUser(user);

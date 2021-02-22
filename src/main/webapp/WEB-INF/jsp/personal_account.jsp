@@ -74,7 +74,8 @@
                                 <form id="cancel-form" action="controller" method="post">
                                     <input type="hidden" name="command" value="cancelOrder"/>
                                     <input type="hidden" name="orderId" value="${order.id}">
-                                    <input class="btn btn-danger" type="submit" value="<fmt:message key="personal_account_jsp.order.cancel"/>">
+                                    <input class="btn btn-danger" type="submit"
+                                           value="<fmt:message key="personal_account_jsp.order.cancel"/>">
                                 </form>
                             </td>
                         </tr>
@@ -88,11 +89,12 @@
                 <table id="bills-list" class="table">
                     <tbody>
                     <c:forEach var="bill" items="${bills}">
-                        <form id="payment_form" action="controller" method="post">
-                            <input type="hidden" name="command" value="pay"/>
-                            <input type="hidden" name="sum" value="${bill.sum}">
-                            <input type="hidden" name="billId" value="${bill.id}">
-                            <tr>
+
+                        <tr>
+                            <form id="payment_form" action="controller" method="post">
+                                <input type="hidden" name="command" value="pay"/>
+                                <input type="hidden" name="sum" value="${bill.sum}">
+                                <input type="hidden" name="billId" value="${bill.id}">
                                 <td>${bill.sum}$</td>
                                 <td><fmt:formatDate value="${bill.dateIn}"/></td>
                                 <td><fmt:formatDate value="${bill.dateOut}"/></td>
@@ -101,17 +103,26 @@
                                 </c:if>
                                 <c:if test="${bill.status == 'NOT_PAID'}">
                                     <td><fmt:message key="room_jsp.payment_status.not_paid"/></td>
-                                </c:if>
-                                <c:if test="${bill.status == 'NOT_PAID'}">
                                     <td><input class="btn btn-primary" type="submit"
                                                value="<fmt:message key="personal_account_jsp.bill.pay"/>">
                                     </td>
                                 </c:if>
-                            </tr>
-                        </form>
+                            </form>
+                            <td>
+                                <form action="controller" method="get">
+                                    <input type="hidden" name="billId" value="${bill.id}">
+                                    <input type="hidden" name="command" value="downloadFile"/>
+                                    <c:if test="${bill.status == 'PAID'}">
+                                        <input type="submit" class="btn btn-success"
+                                               value="<fmt:message key="personal_account_jsp.bill.download"/> ">
+                                    </c:if>
+                                </form>
+                            </td>
+                        </tr>
                     </c:forEach>
                     </tbody>
                 </table>
+
             </c:when>
             <c:when test="${to=='info'}">
                 <form action="controller" method="post"

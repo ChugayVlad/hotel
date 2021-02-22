@@ -18,7 +18,6 @@ public class CommandContainer {
         commands.put("showRooms", new ShowRoomsCommand());
         commands.put("makeOrder", new CreateOrderCommand());
         commands.put("register", new RegisterClientCommand());
-        commands.put("successOrder", new SuccessOrderCommand()); //<<
         commands.put("roomDescription", new RoomDescriptionCommand());
         commands.put("openPersonalAccount", new OpenPersonalAccountCommand());
         commands.put("bookRoom", new BookRoomCommand());
@@ -31,6 +30,8 @@ public class CommandContainer {
         commands.put("cancelOrder", new CancelOrderCommand());
         commands.put("editUser", new EditUserCommand());
         commands.put("changeLanguage", new ChangeLanguageCommand());
+
+        commands.put("downloadFile", new DownloadBillCommand());
 
         LOG.debug("Command container was successfully initialized");
         LOG.trace("Number of commands --> " + commands.size());

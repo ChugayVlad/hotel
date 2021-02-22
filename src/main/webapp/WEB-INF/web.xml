@@ -46,8 +46,6 @@
     </servlet-mapping>
 
 
-
-
     <filter>
         <filter-name>SecurityFilter</filter-name>
         <filter-class>com.nure.controller.filter.SecurityFilter</filter-class>
@@ -57,7 +55,7 @@
         </init-param>
         <init-param>
             <param-name>client</param-name>
-            <param-value>openPersonalAccount makeOrder bookRoom pay cancelOrder editUser</param-value>
+            <param-value>openPersonalAccount makeOrder bookRoom pay cancelOrder editUser downloadFile</param-value>
         </init-param>
         <init-param>
             <param-name>common</param-name>
