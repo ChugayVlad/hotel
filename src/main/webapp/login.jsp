@@ -26,7 +26,7 @@
         </div>
         <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<fmt:message key="authorization.password"/> " required>
 
-        <button class="btn btn-lg btn-primary btn-block my-3" style="align-content: center" type="submit"><fmt:message key="login.jsp.form.submit_sign_in"/> </button>
+        <button class="btn btn-lg btn-primary btn-block my-3" style="align-content: center" type="submit"><fmt:message key="login_jsp.form.submit_sign_in"/> </button>
         <a href="controller?command=register"><fmt:message key="authorization.form_sign_up"/> </a>
     </form>
 

@@ -16,7 +16,6 @@
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 <%--<div class="order-wrapper bg-light">--%>
 
-
 <c:if test="${user.roleId ne 0}">
     <section class="py-3 container">
         <div class="row py-lg-5">
@@ -55,9 +54,11 @@
             </form>
 
         </div>
-        <div class="row">
-            <p class="justify-center text-danger badge bg-light">${message}</p>
-        </div>
+        <c:if test="${message ne null}">
+            <div class="row alert alert-danger" role="alert">
+                <fmt:message key="${message}"/>
+            </div>
+        </c:if>
     </section>
 </c:if>
 
@@ -130,9 +131,11 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             <c:forEach var="room" items="${rooms}">
                 <div class="card shadow-sm">
-                    <img src="${pageContext.request.contextPath}/images/1.jpg" class="img-thumbnail">
+                    <img src="${pageContext.request.contextPath}/images/${room.image}" class="img-thumbnail"
+                         style="height: 300px;">
+
                     <div class="card-body">
-                        <p class="card-text">${room.description}</p>
+                        <p class="card-text" style="height: 250px">${room.description}</p>
                         <p class="card-text"><fmt:message key="main_jsp.table.places"/>: ${room.places}</p>
                         <p class="card-text"><fmt:message key="main_jsp.table.type"/>: ${room.type.name}</p>
                         <p class="card-text"><fmt:message key="main_jsp.table.price"/>: ${room.price}$</p>
@@ -151,7 +154,7 @@
 </div>
 
 <div class="justify-center mb-5"><util:pagination path="controller?command=showRooms" page="${page}"
-                                        pageSize="${pageSize}" maxPage="${maxPage}"/></div>
+                                                  pageSize="${pageSize}" maxPage="${maxPage}"/></div>
 
 <%--</div>--%>
 </body>

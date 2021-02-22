@@ -33,8 +33,8 @@
                     <tr>
                         <td>${bill.user.firstName}</td>
                         <td>${bill.user.lastName}</td>
-                        <td>${bill.dateIn}</td>
-                        <td>${bill.dateOut}</td>
+                        <td><fmt:formatDate value="${bill.dateIn}"/></td>
+                        <td><fmt:formatDate value="${bill.dateOut}"/></td>
                         <c:if test="${bill.status == 'PAID'}">
                             <td><fmt:message key="room_jsp.payment_status.paid"/></td>
                         </c:if>
@@ -51,7 +51,6 @@
     <c:otherwise>
         <div class="d-flex justify-content-center pt-5">
             <form class="row g-3" id="room_description" action="controller" method="post">
-
                 <input type="hidden" name="command" value="bookRoom"/>
 
                 <input type="hidden" name="roomId" value="${roomId}">
@@ -68,9 +67,11 @@
                     <input class="btn btn-primary btn-sm" type="submit"
                            value="<fmt:message key="room_jsp.form_submit_book"/>">
                 </div>
-                <div class="row pt-3">
-                    <p class="text-danger badge bg-light">${message}</p>
-                </div>
+                <c:if test="${message ne null}">
+                    <div class="row mt-3 alert alert-danger" role="alert">
+                       <fmt:message key="${message}"/>
+                    </div>
+                </c:if>
             </form>
         </div>
     </c:otherwise>

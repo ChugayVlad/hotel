@@ -52,8 +52,8 @@
                     <c:forEach var="order" items="${orders}">
                         <tr>
                             <td>${order.places}</td>
-                            <td>${order.dateIn}</td>
-                            <td>${order.dateOut}</td>
+                            <td><fmt:formatDate value="${order.dateIn}"/></td>
+                            <td><fmt:formatDate value="${order.dateOut}"/></td>
                             <td>${order.type.name}</td>
                             <td>${order.sum}</td>
                             <td>
@@ -65,7 +65,7 @@
                                     <input type="hidden" name="dateIn" value="${order.dateIn}">
                                     <input type="hidden" name="dateOut" value="${order.dateOut}">
                                     <c:if test="${order.roomId ne 0}">
-                                        <input class="btn btn-dark" type="submit"
+                                        <input class="btn btn-primary" type="submit"
                                                value="<fmt:message key="personal_account_jsp.order.accept"/>">
                                     </c:if>
                                 </form>
@@ -74,7 +74,7 @@
                                 <form id="cancel-form" action="controller" method="post">
                                     <input type="hidden" name="command" value="cancelOrder"/>
                                     <input type="hidden" name="orderId" value="${order.id}">
-                                    <input class="btn btn-close" type="submit">
+                                    <input class="btn btn-danger" type="submit" value="<fmt:message key="personal_account_jsp.order.cancel"/>">
                                 </form>
                             </td>
                         </tr>
@@ -93,13 +93,18 @@
                             <input type="hidden" name="sum" value="${bill.sum}">
                             <input type="hidden" name="billId" value="${bill.id}">
                             <tr>
-                                <td>${bill.sum}</td>
-                                <td>${bill.dateIn}</td>
-                                <td>${bill.dateOut}</td>
-                                <td>${bill.status}</td>
+                                <td>${bill.sum}$</td>
+                                <td><fmt:formatDate value="${bill.dateIn}"/></td>
+                                <td><fmt:formatDate value="${bill.dateOut}"/></td>
+                                <c:if test="${bill.status == 'PAID'}">
+                                    <td><fmt:message key="room_jsp.payment_status.paid"/></td>
+                                </c:if>
                                 <c:if test="${bill.status == 'NOT_PAID'}">
-                                    <td><input type="text" name="money"></td>
-                                    <td><input class="btn btn-outline-primary" type="submit" value="<fmt:message key="personal_account_jsp.bill.pay"/>">
+                                    <td><fmt:message key="room_jsp.payment_status.not_paid"/></td>
+                                </c:if>
+                                <c:if test="${bill.status == 'NOT_PAID'}">
+                                    <td><input class="btn btn-primary" type="submit"
+                                               value="<fmt:message key="personal_account_jsp.bill.pay"/>">
                                     </td>
                                 </c:if>
                             </tr>

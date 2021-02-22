@@ -1,4 +1,4 @@
-<%@ page import="com.my.entity.Role" %>
+<%@ page import="com.nure.entity.Role" %>
 <%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 
@@ -36,7 +36,6 @@
             <li class="nav-item">
                 <form action="controller" method="post">
                     <input type="hidden" name="command" value="changeLanguage"/>
-
                     <select class="form-select" name="locale" onchange="this.form.submit()">
                         <c:forEach items="${applicationScope.locales}" var="locale">
                             <c:set var="selected" value="${locale.key == currentLocale ? 'selected' : '' }"/>
@@ -46,12 +45,12 @@
                 </form>
             </li>
             <li class="nav-item">
-                <li class="nav-link">
-                    <c:out value="${user.firstName} ${user.lastName}"/>
-                    <c:if test="${not empty userRole}">
-                        <c:out value="(${userRole.name})"/>
-                    </c:if>
-                </li>
+            <li class="nav-link">
+                <c:out value="${user.firstName} ${user.lastName}"/>
+                <c:if test="${not empty userRole}">
+                    <c:out value="(${userRole.name})"/>
+                </c:if>
+            </li>
             </li>
 
             <li class="nav-item">
