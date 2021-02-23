@@ -1,5 +1,6 @@
 package com.nure.command;
 
+import com.nure.command.util.PathUtil;
 import com.nure.entity.Role;
 import com.nure.entity.User;
 import com.nure.exception.AppException;
@@ -18,9 +19,10 @@ public class LoginCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Command starts");
+        PathUtil.saveCurrentPathToSession(request);
         HttpSession session = request.getSession();
 
-        if ("GET".equals(request.getMethod())){
+        if ("GET".equals(request.getMethod())) {
             return Path.PAGE_LOGIN;
         }
 

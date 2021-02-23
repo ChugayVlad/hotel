@@ -6,7 +6,6 @@ import com.nure.dao.factory.DaoFactory;
 import com.nure.dao.OrderDao;
 import com.nure.entity.Order;
 import com.nure.entity.Room;
-import com.nure.exception.AppException;
 import com.nure.exception.DAOException;
 import com.nure.exception.ServiceException;
 import com.nure.exception.ValidationException;
@@ -22,7 +21,7 @@ public class OrderServiceImpl implements OrderService {
     private static final DatasourceType dbType = DatasourceType.MY_SQL;
     private static DaoFactory daoFactory;
 
-    public OrderServiceImpl() throws AppException {
+    public OrderServiceImpl() {
         try {
             daoFactory = DaoFactory.getDaoFactory(dbType);
         } catch (DAOException e) {
@@ -33,9 +32,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void insertOrder(Order order) throws ServiceException, ValidationException {
         OrderDao orderDao;
-
         Validator.validateDate(order.getDateIn(), order.getDateOut());
-
         try {
             daoFactory.open();
             orderDao = daoFactory.getOrderDao();

@@ -8,6 +8,9 @@ import org.apache.log4j.Logger;
 
 import java.util.TimerTask;
 
+/**
+ * Provides a delete logic if {@link Bill} is not paid.
+ */
 public class DeleteBillJob extends TimerTask {
     private static Logger LOG = Logger.getLogger(DeleteBillJob.class);
 

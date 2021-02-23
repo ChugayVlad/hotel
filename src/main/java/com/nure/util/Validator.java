@@ -1,5 +1,6 @@
 package com.nure.util;
 
+import com.nure.entity.Bill;
 import com.nure.entity.User;
 import com.nure.exception.ValidationException;
 
@@ -7,6 +8,9 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
+/**
+ * Provides a validation logic of entities.
+ */
 public class Validator {
     public static void validateDate(Date dateIn, Date dateOut) throws ValidationException {
         LocalDate currentDate = LocalDate.now();

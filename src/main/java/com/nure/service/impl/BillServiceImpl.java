@@ -87,14 +87,17 @@ public class BillServiceImpl implements BillService {
         try {
             daoFactory.beginTransaction();
             BillDao billDao = daoFactory.getBillDao();
-
+            List<Bill> bills = billDao.getAllByDate(bill.getRoomId(), bill.getDateIn(), bill.getDateOut());
+            if (!bills.isEmpty()) {
+                throw new ValidationException("message.booked_room");
+            }
             RoomDao roomDao = daoFactory.getRoomDao();
             OrderDao orderDao = daoFactory.getOrderDao();
             billDao.insert(bill);
             roomDao.updateStatus(RoomStatus.BOOKED, bill.getRoomId());
             orderDao.delete(orderId);
             daoFactory.commitTransaction();
-        } catch (DAOException e) {
+        } catch (DAOException | ValidationException e) {
             daoFactory.rollbackTransaction();
             LOG.error("Cannot insert bill or delete order", e);
             throw new ServiceException("Cannot insert bill or delete order", e);

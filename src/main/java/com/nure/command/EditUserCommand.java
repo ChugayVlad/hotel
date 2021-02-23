@@ -2,6 +2,7 @@ package com.nure.command;
 
 import com.nure.entity.User;
 import com.nure.exception.AppException;
+import com.nure.exception.ValidationException;
 import com.nure.service.UserService;
 import com.nure.service.impl.UserServiceImpl;
 import org.apache.log4j.Logger;
@@ -10,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class EditUserCommand implements Command{
+public class EditUserCommand implements Command {
     private static final Logger LOG = Logger.getLogger(EditUserCommand.class);
 
     @Override
@@ -26,9 +27,12 @@ public class EditUserCommand implements Command{
         user.setEmail(email);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-
-        userService.update(user);
-
+        try {
+            userService.update(user);
+        } catch (ValidationException e){
+            String message = "&message=" + e.getMessage();
+            return session.getAttribute("prevPath") + message;
+        }
         session.setAttribute("user", user);
         request.setAttribute("to", "info");
         LOG.debug("Command finished");

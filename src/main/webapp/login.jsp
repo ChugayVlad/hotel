@@ -13,6 +13,8 @@
 </head>
 
 <body>
+<%@ include file="/WEB-INF/jspf/header.jspf" %>
+
 <div class="container mx-auto my-xl-5" style="width: 300px;">
     <form id="login-form" action="controller" method="post">
 

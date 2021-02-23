@@ -1,11 +1,15 @@
 package com.nure.util;
 
+import com.nure.entity.Bill;
 import com.nure.exception.ServiceException;
 import org.apache.log4j.Logger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Provides a password hashing logic.
+ */
 public class PasswordHashing {
     private static final Logger LOG = Logger.getLogger(PasswordHashing.class);
 

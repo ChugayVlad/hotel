@@ -8,8 +8,19 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
     <div class="collapse navbar-collapse d-flex justify-content-end">
-        <c:if test="${not empty user}">
         <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <form action="controller" method="post">
+                    <input type="hidden" name="command" value="changeLanguage"/>
+                    <select class="form-select" name="locale" onchange="this.form.submit()">
+                        <c:forEach items="${applicationScope.locales}" var="locale">
+                            <c:set var="selected" value="${locale.key == currentLocale ? 'selected' : '' }"/>
+                            <option value="${locale.key}" ${selected}>${locale.value}</option>
+                        </c:forEach>
+                    </select>
+                </form>
+            </li>
+            <c:if test="${not empty user}">
             <c:choose>
                 <c:when test="${userRole.name == 'admin' }">
                     <li class="nav-item">
@@ -33,17 +44,7 @@
                     </li>
                 </c:when>
             </c:choose>
-            <li class="nav-item">
-                <form action="controller" method="post">
-                    <input type="hidden" name="command" value="changeLanguage"/>
-                    <select class="form-select" name="locale" onchange="this.form.submit()">
-                        <c:forEach items="${applicationScope.locales}" var="locale">
-                            <c:set var="selected" value="${locale.key == currentLocale ? 'selected' : '' }"/>
-                            <option value="${locale.key}" ${selected}>${locale.value}</option>
-                        </c:forEach>
-                    </select>
-                </form>
-            </li>
+
             <li class="nav-item">
             <li class="nav-link">
                 <c:out value="${user.firstName} ${user.lastName}"/>
@@ -58,12 +59,18 @@
                     <fmt:message key='header_jsp.logout'/>
                 </a>
                 </c:if>
-
-                <c:if test="${empty user and title ne 'Login'}">
+            </li>
+            <c:if test="${empty user}">
+                <li class="nav-item">
+                    <a href="controller?command=showRooms&sortBy=price" class="nav-link"><fmt:message
+                            key='header_jsp.user.main_page'/></a>
+                </li>
+                <li>
                     <a href="controller?command=login" class="nav-link"><fmt:message
                             key='login_jsp.form.submit_sign_in'/></a>
-                </c:if>
-            </li>
+                </li>
+            </c:if>
+
         </ul>
     </div>
 </nav>

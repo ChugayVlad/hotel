@@ -103,23 +103,6 @@ public class BillDaoMysql implements BillDao {
 
     @Override
     public List<Bill> getAll() throws DAOException {
-/*        List<Bill> bills = new ArrayList<>();
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(SQL_SELECT_ALL);
-            while (rs.next()) {
-                bills.add(extractBill(rs));
-            }
-        } catch (SQLException e) {
-            LOG.error("Cannot get bills", e);
-            throw new DAOException("Cannot get bills", e);
-        } finally {
-            closeResultSet(rs);
-            closeStatement(stmt);
-        }
-        return bills;*/
         return null;
     }
 

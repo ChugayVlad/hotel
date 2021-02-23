@@ -4,6 +4,7 @@ import com.nure.exception.DAOException;
 import com.nure.exception.Messages;
 import org.apache.log4j.Logger;
 
+import javax.annotation.Resource;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;

@@ -28,9 +28,9 @@ CREATE TABLE users
 );
 
 INSERT INTO users
-VALUES (DEFAULT, 'User', 'User', 'user', 'user', 1);
+VALUES (DEFAULT, 'User', 'User', 'user@user.ua', '0b4e7a0e5fe84ad35fb5f95b9ceeac79', 1);
 INSERT INTO users
-VALUES (DEFAULT, 'Admin', 'Admin', 'admin', 'admin', 0);
+VALUES (DEFAULT, 'Admin', 'Admin', 'admin@admin.ua', '0b4e7a0e5fe84ad35fb5f95b9ceeac79', 0);
 
 
 

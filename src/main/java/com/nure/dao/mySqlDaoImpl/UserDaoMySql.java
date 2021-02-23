@@ -21,6 +21,7 @@ public class UserDaoMySql implements UserDao {
     private static final String SQL_SELECT_ALL = "SELECT * FROM users";
     private static final String SQL_FIND_USER_BY_EMAIL = "SELECT * FROM users WHERE email=?";
     private static final String SQL_INSERT_USER = "INSERT INTO users (id, first_name, last_name, email, password, role_id) VALUES (DEFAULT, ?, ?, ?, ?, ?)";
+    private static final String SQL_DELETE_BY_ID = "DELETE FROM users WHERE id=?";
 
     private Connection con;
 
@@ -62,12 +63,24 @@ public class UserDaoMySql implements UserDao {
         } catch (SQLException e) {
             LOG.error("Cannot update user", e);
             throw new DAOException("Cannot update user", e);
+        }finally {
+            closeStatement(pstmt);
         }
     }
 
     @Override
-    public void delete(Long id) {
-
+    public void delete(Long id) throws DAOException {
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = con.prepareStatement(SQL_DELETE_BY_ID);
+            pstmt.setLong(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Cannot delete user", e);
+            throw new DAOException("Cannot delete user", e);
+        } finally {
+            closeStatement(pstmt);
+        }
     }
 
     @Override

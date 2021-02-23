@@ -4,6 +4,7 @@ import com.nure.command.util.PathUtil;
 import com.nure.entity.Role;
 import com.nure.entity.User;
 import com.nure.exception.AppException;
+import com.nure.exception.ValidationException;
 import com.nure.service.UserService;
 import com.nure.service.impl.UserServiceImpl;
 import com.nure.util.Path;

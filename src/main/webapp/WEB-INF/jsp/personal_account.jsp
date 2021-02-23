@@ -126,30 +126,62 @@
             </c:when>
             <c:when test="${to=='info'}">
                 <form action="controller" method="post"
-                      class="d-flex flex-column justify-content-around align-items-center form"
+                      class="d-flex flex-column justify-content-around align-items-center form needs-validation" novalidate
                 >
 
                     <input type="hidden" name="command" value="editUser"/>
                     <div class="form-item">
                         <fmt:message key="authorization.email"/>
-                        <input type="text" name="email" value="${user.email}">
+                        <input class="form-control" type="text" required name="email" value="${user.email}" pattern="^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$">
+                        <div class="invalid-feedback">
+                            <fmt:message key="registration_jsp.invalidEmail"/>
+                        </div>
                     </div>
                     <div class="form-item">
                         <fmt:message key="authorization.first_name"/>
-                        <input type="text" name="firstName" value="${user.firstName}">
+                        <input class="form-control" type="text" required name="firstName" value="${user.firstName}" pattern="[A-ZÀ-ß¨¯ª][a-zà-ÿº¿¸]+" minlength="3"
+                               maxlength="40">
+                        <div class="invalid-feedback">
+                            <fmt:message key="registration_jsp.invalidName"/>
+                        </div>
                     </div>
                     <div class="form-item">
                         <fmt:message key="authorization.last_name"/>
-                        <input type="text" name="lastName" value="${user.lastName}">
+                        <input class="form-control" type="text" required name="lastName" value="${user.lastName}" pattern="[A-ZÀ-ß¨¯ª][a-zà-ÿº¿¸]+" minlength="3"
+                               maxlength="40">
+                        <div class="invalid-feedback">
+                            <fmt:message key="registration_jsp.invalidName"/>
+                        </div>
                     </div>
                     <div>
                         <input type="submit" class="btn btn-primary" style="width: 150px;"
                                value="<fmt:message key="personal_account_jsp.form.submit_edit"/>">
                     </div>
+
                 </form>
             </c:when>
         </c:choose>
     </div>
 </div>
 </body>
+
+<script>
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+
 </html>

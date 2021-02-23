@@ -28,9 +28,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUser(String email, String password) throws ServiceException {
+    public User findUser(String email, String password) throws ServiceException, ValidationException {
         if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
-            throw new ServiceException("Login/password cannot be empty");
+            throw new ValidationException("Login/password cannot be empty");
         }
         User user = new User();
         UserDao userDao;
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
             LOG.trace("Found in DB: user --> " + user);
             String incomingPass = PasswordHashing.hash(password);
             if (user == null || !incomingPass.equals(user.getPassword())) {
-                throw new ServiceException("Cannot find user with such login/password");
+                throw new ValidationException("Cannot find user with such login/password");
             }
         } catch (DAOException e) {
             LOG.error(e);
@@ -71,7 +71,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) throws ServiceException {
+    public void update(User user) throws ServiceException, ValidationException {
+        Validator.validateUser(user);
+
         UserDao userDao;
         try {
             daoFactory.open();
@@ -80,6 +82,20 @@ public class UserServiceImpl implements UserService {
         } catch (DAOException e) {
             LOG.error("Cannot update user", e);
             throw new ServiceException("Cannot update user", e);
+        } finally {
+            daoFactory.close();
+        }
+    }
+
+    @Override
+    public void delete(Long id) throws ServiceException {
+        try {
+            daoFactory.open();
+            UserDao userDao = daoFactory.getUserDao();
+            userDao.delete(id);
+        } catch (DAOException e) {
+            LOG.error("Can not delete user", e);
+            throw new ServiceException("Can not delete user", e);
         } finally {
             daoFactory.close();
         }
