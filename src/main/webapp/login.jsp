@@ -9,6 +9,7 @@
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 <html>
 <head>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <title>Login</title>
 </head>
 
@@ -19,17 +20,22 @@
     <form id="login-form" action="controller" method="post">
 
         <input type="hidden" name="command" value="login"/>
-
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-
-        <div class="mb-2">
-        <input type="text" id="inputEmail" name="email" class="form-control" placeholder="<fmt:message key="authorization.email"/> " required
-               autofocus>
+        <div class="justify-center">
+            <h1 class="h3 mb-3 font-weight-normal"><fmt:message key="login_jsp.form.welcome"/></h1>
         </div>
-        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<fmt:message key="authorization.password"/> " required>
-
-        <button class="btn btn-lg btn-primary btn-block my-3" style="align-content: center" type="submit"><fmt:message key="login_jsp.form.submit_sign_in"/> </button>
-        <a href="controller?command=register"><fmt:message key="authorization.form_sign_up"/> </a>
+        <div class="mb-2">
+            <input type="text" id="inputEmail" name="email" class="form-control"
+                   placeholder="<fmt:message key="authorization.email"/> " required
+                   autofocus>
+        </div>
+        <input type="password" name="password" id="inputPassword" class="form-control"
+               placeholder="<fmt:message key="authorization.password"/> " required>
+        <div class="justify-center">
+            <button class="btn btn-lg btn-primary btn-block my-3" style="align-content: center" type="submit">
+                <fmt:message
+                        key="login_jsp.form.submit_sign_in"/></button>
+            <a href="controller?command=register"><fmt:message key="authorization.form_sign_up"/> </a>
+        </div>
     </form>
 
 </div>

@@ -42,13 +42,13 @@ public interface RoomDao extends Dao<Room> {
      * Finds all rooms by parameters
      *
      * @param places - room places
-     * @param typeId - id type of room
+     * @param type - id type of room
      * @param dateIn - arrival date
      * @param dateOut - departure date
      * @return a count of rooms from database
      * @throws DAOException if issues with connection or data source
      */
-    List<Room> findRoomsByParameters(Integer places, Long typeId, Date dateIn, Date dateOut) throws DAOException;
+    List<Room> findRoomsByParameters(Integer places, String type, Date dateIn, Date dateOut) throws DAOException;
 
     /**
      * Finds number of rooms by status in a database

@@ -1,5 +1,6 @@
-package com.nure.command;
+package com.nure.command.client;
 
+import com.nure.command.Command;
 import com.nure.exception.AppException;
 import com.nure.service.OrderService;
 import com.nure.service.impl.OrderServiceImpl;
@@ -8,8 +9,11 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-public class CancelOrderCommand implements Command{
+/**
+ * Cancel order command.
+ *
+ */
+public class CancelOrderCommand implements Command {
     private static final Logger LOG = Logger.getLogger(CancelOrderCommand.class);
 
     @Override

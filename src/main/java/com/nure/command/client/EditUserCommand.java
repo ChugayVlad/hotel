@@ -1,5 +1,6 @@
-package com.nure.command;
+package com.nure.command.client;
 
+import com.nure.command.Command;
 import com.nure.entity.User;
 import com.nure.exception.AppException;
 import com.nure.exception.ValidationException;
@@ -10,7 +11,10 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+/**
+ * Edit user command.
+ *
+ */
 public class EditUserCommand implements Command {
     private static final Logger LOG = Logger.getLogger(EditUserCommand.class);
 

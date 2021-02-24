@@ -24,7 +24,7 @@ public class DeleteBillJob extends TimerTask {
 
     @Override
     public void run() {
-        LOG.trace("Check is paid bill -->> " + bill);
+        LOG.trace("Check is paid bill --> " + bill);
         try {
             billService.deleteIfNotPaid(bill);
         } catch (ServiceException e) {

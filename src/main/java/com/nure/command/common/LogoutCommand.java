@@ -1,5 +1,6 @@
-package com.nure.command;
+package com.nure.command.common;
 
+import com.nure.command.Command;
 import com.nure.exception.AppException;
 import com.nure.util.Path;
 import org.apache.log4j.Logger;
@@ -8,7 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class LogoutCommand implements Command{
+/**
+ * Logout commands.
+ *
+ */
+public class LogoutCommand implements Command {
     private static final Logger LOG = Logger.getLogger(LogoutCommand.class);
 
     @Override

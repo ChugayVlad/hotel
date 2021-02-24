@@ -1,5 +1,6 @@
-package com.nure.command;
+package com.nure.command.client;
 
+import com.nure.command.Command;
 import com.nure.entity.Bill;
 import com.nure.entity.BillStatus;
 import com.nure.exception.AppException;
@@ -11,7 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class PayCommand implements Command{
+/**
+ *  Pay bill command.
+ *
+ */
+public class PayCommand implements Command {
     private static final Logger LOG = Logger.getLogger(PayCommand.class);
 
     @Override

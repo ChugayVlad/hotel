@@ -12,7 +12,7 @@
 <html>
 
 <c:set var="title" value="Error" scope="page"/>
-<body>
+<body class="bg-light">
 
 <table id="main-container">
 
@@ -20,11 +20,6 @@
 
     <tr>
         <td class="content">
-
-            <h2 class="error">
-                The following error occurred
-            </h2>
-
 
             <c:set var="code" value="${requestScope['javax.servlet.error.status_code']}"/>
             <c:set var="message" value="${requestScope['javax.servlet.error.message']}"/>
@@ -37,10 +32,11 @@
             <c:if test="${not empty message}">
                 <h3>${message}</h3>
             </c:if>
-
-            <c:if test="${not empty errorMessage}">
-                <h3>${errorMessage}</h3>
-            </c:if>
+            <div class="justify-center">
+                <c:if test="${not empty errorMessage}">
+                    <h3>${errorMessage}</h3>
+                </c:if>
+            </div>
         </td>
     </tr>
 </table>

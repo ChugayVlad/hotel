@@ -1,5 +1,6 @@
-package com.nure.command;
+package com.nure.command.client;
 
+import com.nure.command.Command;
 import com.nure.entity.Bill;
 import com.nure.entity.BillStatus;
 import com.nure.entity.Order;
@@ -23,7 +24,10 @@ import javax.servlet.http.HttpSession;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Timer;
-
+/**
+ * Book room command
+ *
+ */
 public class BookRoomCommand implements Command {
     private static final Logger LOG = Logger.getLogger(BookRoomCommand.class);
 

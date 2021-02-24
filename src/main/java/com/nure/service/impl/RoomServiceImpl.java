@@ -43,12 +43,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> getAllRoomsByParameters(Integer places, Long typeId, Date dateIn, Date dateOut) throws ServiceException {
+    public List<Room> getAllRoomsByParameters(Integer places, String type, Date dateIn, Date dateOut) throws ServiceException {
         List<Room> rooms;
         try {
             daoFactory.open();
             RoomDao roomDao = daoFactory.getRoomDao();
-            rooms = roomDao.findRoomsByParameters(places, typeId, dateIn, dateOut);
+            rooms = roomDao.findRoomsByParameters(places, type, dateIn, dateOut);
         } catch (DAOException e) {
             LOG.error("Can not find rooms by parameters", e);
             throw new ServiceException("Can not find rooms by parameters");

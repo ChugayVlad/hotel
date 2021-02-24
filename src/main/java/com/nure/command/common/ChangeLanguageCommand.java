@@ -1,13 +1,17 @@
-package com.nure.command;
+package com.nure.command.common;
 
+import com.nure.command.Command;
 import com.nure.exception.AppException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-public class ChangeLanguageCommand implements Command{
+/**
+ * Change language command.
+ *
+ */
+public class ChangeLanguageCommand implements Command {
     private static final Logger LOG = Logger.getLogger(ChangeLanguageCommand.class);
 
     @Override

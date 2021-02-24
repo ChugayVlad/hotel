@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Set available room command.
+ *
+ */
 public class SetRoomForUserCommand implements Command {
     private static final Logger LOG = Logger.getLogger(SetRoomForUserCommand.class);
 

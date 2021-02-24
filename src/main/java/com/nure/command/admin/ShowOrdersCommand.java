@@ -14,6 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * List of orders command.
+ *
+ */
 public class ShowOrdersCommand implements Command {
     private static final Logger LOG = Logger.getLogger(ShowOrdersCommand.class);
 

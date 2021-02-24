@@ -32,9 +32,9 @@
         <c:forEach var="order" items="${orders}">
             <tr>
                 <td>${order.places}</td>
-                <td>${order.dateIn}</td>
-                <td>${order.dateOut}</td>
-                <td>${order.type.name}</td>
+                <td><fmt:formatDate value="${order.dateIn}"/></td>
+                <td><fmt:formatDate value="${order.dateOut}"/></td>
+                <td><fmt:message key="${order.type}"/></td>
                 <td>${order.user.firstName}</td>
                 <td>${order.user.lastName}</td>
                 <td>

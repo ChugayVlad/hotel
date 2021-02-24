@@ -1,5 +1,6 @@
-package com.nure.command;
+package com.nure.command.client;
 
+import com.nure.command.Command;
 import com.nure.command.util.PathUtil;
 import com.nure.entity.Bill;
 import com.nure.entity.Order;
@@ -17,6 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * Open personal account command.
+ *
+ */
 public class OpenPersonalAccountCommand implements Command {
     private static final Logger LOG = Logger.getLogger(OpenPersonalAccountCommand.class);
 
@@ -27,24 +32,20 @@ public class OpenPersonalAccountCommand implements Command {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         String to = request.getParameter("to");
-
         if ("bills".equals(to)) {
             BillService billService = new BillServiceImpl();
             List<Bill> bills = billService.getAllBills(user.getId());
             LOG.trace("Bills -->> " + bills);
             request.setAttribute("bills", bills);
         }
-
         if ("orders".equals(to)) {
             OrderService orderService = new OrderServiceImpl();
             List<Order> orders = orderService.getAllOrdersByUser(user.getId());
             request.setAttribute("orders", orders);
         }
-
         if (to != null){
             request.setAttribute("to", to);
         }
-
         LOG.debug("Command finished");
         return Path.PAGE_PERSONAL_ACCOUNT;
     }

@@ -25,13 +25,13 @@ public interface RoomService {
      * Finds all rooms by parameters
      *
      * @param places - room places
-     * @param typeId - id type of room
+     * @param type - id type of room
      * @param dateIn - arrival date
      * @param dateOut - departure date
      * @return a {@link List} of rooms
      * @throws ServiceException if issues in dao layer
      */
-    List<Room> getAllRoomsByParameters(Integer places, Long typeId, Date dateIn, Date dateOut) throws ServiceException;
+    List<Room> getAllRoomsByParameters(Integer places, String type, Date dateIn, Date dateOut) throws ServiceException;
 
     /**
      * Finds room by id

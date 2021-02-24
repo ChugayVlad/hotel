@@ -3,11 +3,28 @@ package com.nure.command;
 import com.nure.command.admin.FindRoomsCommand;
 import com.nure.command.admin.SetRoomForUserCommand;
 import com.nure.command.admin.ShowOrdersCommand;
+import com.nure.command.client.BookRoomCommand;
+import com.nure.command.client.CancelOrderCommand;
+import com.nure.command.client.CreateOrderCommand;
+import com.nure.command.client.DownloadBillCommand;
+import com.nure.command.client.EditUserCommand;
+import com.nure.command.client.OpenPersonalAccountCommand;
+import com.nure.command.client.PayCommand;
+import com.nure.command.client.RegisterClientCommand;
+import com.nure.command.common.ChangeLanguageCommand;
+import com.nure.command.common.ErrorCommand;
+import com.nure.command.common.LoginCommand;
+import com.nure.command.common.LogoutCommand;
+import com.nure.command.common.RoomDescriptionCommand;
+import com.nure.command.common.ShowRoomsCommand;
 import org.apache.log4j.Logger;
 
 import java.util.Map;
 import java.util.TreeMap;
-
+/**
+ * Holder for all commands.
+ *
+ */
 public class CommandContainer {
     private static final Logger LOG = Logger.getLogger(CommandContainer.class);
 
@@ -30,7 +47,6 @@ public class CommandContainer {
         commands.put("cancelOrder", new CancelOrderCommand());
         commands.put("editUser", new EditUserCommand());
         commands.put("changeLanguage", new ChangeLanguageCommand());
-
         commands.put("downloadFile", new DownloadBillCommand());
 
         LOG.debug("Command container was successfully initialized");

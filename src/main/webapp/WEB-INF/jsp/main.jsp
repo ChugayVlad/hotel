@@ -42,9 +42,10 @@
                 <div class="order-form-item">
                     <label for="type"><fmt:message key="main_jsp.form.room_type"/></label>
                     <select class="form-select" id="type" name="roomType">
-                        <c:forEach var="type" items="${types}">
-                            <option value="${type.id}"><c:out value="${type.name}"/></option>
-                        </c:forEach>
+                            <option value="STANDARD"><fmt:message key="STANDARD"/></option>
+                            <option value="ECONOMY"><fmt:message key="ECONOMY"/></option>
+                            <option value="DELUXE"><fmt:message key="DELUXE"/></option>
+                            <option value="BUSINESS_DELUXE"><fmt:message key="BUSINESS_DELUXE"/></option>
                     </select>
                 </div>
                 <div class="order-submit">
@@ -61,32 +62,6 @@
         </c:if>
     </section>
 </c:if>
-
-
-<%-- <table id="rooms-list" class="table table-hover orders-table">
-     <thead class="table-dark">
-     <tr>
-         <th scope="col"><fmt:message key="main_jsp.table.type"/></th>
-         <th scope="col"><fmt:message key="main_jsp.table.places"/></th>
-         <th scope="col"><fmt:message key="main_jsp.table.price"/></th>
-         <th></th>
-     </tr>
-     </thead>
-     <tbody>
-     <c:forEach var="room" items="${rooms}">
-         <tr class="table-row">
-             <td>${room.type}</td>
-             <td>${room.places}</td>
-             <td>${room.price}</td>
-             <td>
-                 <a href="controller?command=roomDescription&roomId=${room.id}&roomStatus=${room.status}"><fmt:message
-                         key="main_jsp.table.href"/></a>
-             </td>
-         </tr>
-     </c:forEach>
-
-     </tbody>
- </table>--%>
 
 
 <div class="album py-5 bg-light">
@@ -110,7 +85,7 @@
             <input type="hidden" name="command" value="showRooms"/>
             <div class="col-auto">
                 <select class="form-select" name="sortBy">
-                    <option value="type_id"><fmt:message key="main_jsp.form.sort.type"/></option>
+                    <option value="type"><fmt:message key="main_jsp.form.sort.type"/></option>
                     <option value="places"><fmt:message key="main_jsp.form.sort.places"/></option>
                     <option value="price"><fmt:message key="main_jsp.form.sort.price"/></option>
                 </select>
@@ -137,7 +112,7 @@
                     <div class="card-body">
                         <p class="card-text" style="height: 250px">${room.description}</p>
                         <p class="card-text"><fmt:message key="main_jsp.table.places"/>: ${room.places}</p>
-                        <p class="card-text"><fmt:message key="main_jsp.table.type"/>: ${room.type.name}</p>
+                        <p class="card-text"><fmt:message key="main_jsp.table.type"/>: <fmt:message key="${room.type}"/> </p>
                         <p class="card-text"><fmt:message key="main_jsp.table.price"/>: ${room.price}$</p>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">

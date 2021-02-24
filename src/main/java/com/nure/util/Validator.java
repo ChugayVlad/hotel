@@ -28,7 +28,14 @@ public class Validator {
     public static void validateUser(User user) throws ValidationException {
         Pattern pattern = Pattern.compile("^[A-ZА-ЯЁЇЄ][a-zа-яєїё]+");
         if (!pattern.matcher(user.getFirstName()).matches()){
-            throw new ValidationException("Name does not match");
+            throw new ValidationException("Name does not match pattern");
+        }
+        if (!pattern.matcher(user.getLastName()).matches()){
+            throw new ValidationException("Last name does not match pattern");
+        }
+        pattern = Pattern.compile("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
+        if (!pattern.matcher(user.getEmail()).matches()){
+            throw new ValidationException("Email does not match pattern");
         }
     }
 }

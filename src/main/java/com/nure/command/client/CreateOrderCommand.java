@@ -1,14 +1,13 @@
-package com.nure.command;
+package com.nure.command.client;
 
+import com.nure.command.Command;
 import com.nure.entity.Order;
 import com.nure.entity.RoomType;
 import com.nure.entity.User;
 import com.nure.exception.AppException;
 import com.nure.exception.ValidationException;
 import com.nure.service.OrderService;
-import com.nure.service.RoomTypeService;
 import com.nure.service.impl.OrderServiceImpl;
-import com.nure.service.impl.RoomTypeServiceImpl;
 import com.nure.util.Path;
 import org.apache.log4j.Logger;
 
@@ -18,7 +17,10 @@ import javax.servlet.http.HttpSession;
 import java.sql.Date;
 import java.time.LocalDate;
 
-
+/**
+ * Create order command.
+ *
+ */
 public class CreateOrderCommand implements Command {
     private static final Logger LOG = Logger.getLogger(CreateOrderCommand.class);
     private static final String REQUEST_MESSAGE = "&message=";
@@ -38,10 +40,7 @@ public class CreateOrderCommand implements Command {
         order.setDateIn(Date.valueOf(dateIn));
         order.setDateOut(Date.valueOf(dateOut));
 
-        RoomTypeService typeService = new RoomTypeServiceImpl();
-        RoomType type = typeService.getById(Integer.parseInt(request.getParameter("roomType")));
-
-        order.setType(type);
+        order.setType(RoomType.valueOf(request.getParameter("roomType")));
 
         User user = (User) session.getAttribute("user");
         order.setUser(user);

@@ -1,5 +1,6 @@
-package com.nure.command;
+package com.nure.command.common;
 
+import com.nure.command.Command;
 import com.nure.command.util.PathUtil;
 import com.nure.entity.Role;
 import com.nure.entity.User;
@@ -12,7 +13,10 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+/**
+ * Login command.
+ *
+ */
 public class LoginCommand implements Command {
     private static final Logger LOG = Logger.getLogger(LoginCommand.class);
 

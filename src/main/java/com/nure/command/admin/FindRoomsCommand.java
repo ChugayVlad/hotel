@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * Find rooms with order parameters.
+ *
+ */
 public class FindRoomsCommand implements Command {
     private static final Logger LOG = Logger.getLogger(FindRoomsCommand.class);
 
@@ -30,7 +34,7 @@ public class FindRoomsCommand implements Command {
         Order order = orderService.getById(orderId);
 
         RoomService roomService = new RoomServiceImpl();
-        List<Room> rooms = roomService.getAllRoomsByParameters(order.getPlaces(), order.getType().getId(), order.getDateIn(), order.getDateOut());
+        List<Room> rooms = roomService.getAllRoomsByParameters(order.getPlaces(), order.getType().name(), order.getDateIn(), order.getDateOut());
         LOG.trace("Rooms --> " + rooms);
 
         request.setAttribute("rooms", rooms);

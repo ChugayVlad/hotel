@@ -54,7 +54,7 @@
                             <td>${order.places}</td>
                             <td><fmt:formatDate value="${order.dateIn}"/></td>
                             <td><fmt:formatDate value="${order.dateOut}"/></td>
-                            <td>${order.type.name}</td>
+                            <td><fmt:message key="${order.type}"/> </td>
                             <td>${order.sum}</td>
                             <td>
                                 <form id="book-form" action="controller" method="post">

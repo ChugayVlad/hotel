@@ -1,13 +1,11 @@
-package com.nure.command;
+package com.nure.command.common;
 
+import com.nure.command.Command;
 import com.nure.command.util.PathUtil;
 import com.nure.entity.Room;
-import com.nure.entity.RoomType;
 import com.nure.exception.AppException;
 import com.nure.service.RoomService;
 import com.nure.service.impl.RoomServiceImpl;
-import com.nure.service.RoomTypeService;
-import com.nure.service.impl.RoomTypeServiceImpl;
 import com.nure.util.Path;
 import org.apache.log4j.Logger;
 
@@ -15,7 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public class ShowRoomsCommand implements Command{
+/**
+ * Show rooms command.
+ *
+ */
+public class ShowRoomsCommand implements Command {
     private static final Logger LOG = Logger.getLogger(ShowRoomsCommand.class);
     private static final String DEFAULT_ORDER = "ASC";
     private static final String DEFAULT_SORT = "price";
@@ -69,10 +71,6 @@ public class ShowRoomsCommand implements Command{
 
         int maxPage = (int) Math.ceil((double)roomsNumber / pageSize);
 
-        RoomTypeService typeService = new RoomTypeServiceImpl();
-        List<RoomType> roomTypes = typeService.getAllTypes();
-        LOG.trace("Types --> " + roomTypes);
-
         request.setAttribute("page", page);
         request.setAttribute("pageSize", pageSize);
         request.setAttribute("maxPage", maxPage);
@@ -81,8 +79,6 @@ public class ShowRoomsCommand implements Command{
         request.setAttribute("status", status);
 
         request.setAttribute("message", request.getParameter("message"));
-
-        request.setAttribute("types", roomTypes);
 
         LOG.debug("Command finished");
         return Path.PAGE_MAIN;

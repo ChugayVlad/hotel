@@ -8,8 +8,6 @@ import com.nure.dao.mySqlDaoImpl.BillDaoMysql;
 import com.nure.dao.mySqlDaoImpl.OrderDaoMySql;
 import com.nure.dao.RoomDao;
 import com.nure.dao.mySqlDaoImpl.RoomDaoMySql;
-import com.nure.dao.RoomTypeDao;
-import com.nure.dao.mySqlDaoImpl.RoomTypeDaoMySql;
 import com.nure.dao.UserDao;
 import com.nure.dao.mySqlDaoImpl.UserDaoMySql;
 import com.nure.exception.DAOException;
@@ -62,11 +60,6 @@ public class DaoFactoryMySql extends DaoFactory{
     @Override
     public RoomDao getRoomDao() {
         return new RoomDaoMySql(connection);
-    }
-
-    @Override
-    public RoomTypeDao getRoomTypeDao() {
-        return new RoomTypeDaoMySql(connection);
     }
 
     @Override

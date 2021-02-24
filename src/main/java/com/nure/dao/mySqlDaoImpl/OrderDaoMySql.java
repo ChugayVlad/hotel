@@ -18,11 +18,11 @@ import java.util.List;
 
 public class OrderDaoMySql implements OrderDao {
     private static final Logger LOG = Logger.getLogger(OrderDaoMySql.class);
-    private static final String SQL_SELECT_ALL = "SELECT  * FROM orders LEFT JOIN room_types ON orders.type_id = room_types.id LEFT JOIN users u on orders.user_id = u.id WHERE room_id IS NULL LIMIT ? OFFSET ?";
-    private static final String SQL_INSERT_ORDER = "INSERT INTO orders (id, places, type_id, date_in, date_out, user_id) VALUES (DEFAULT, ?, ?, ?, ?, ?)";
+    private static final String SQL_SELECT_ALL = "SELECT  * FROM orders LEFT JOIN users u on orders.user_id = u.id WHERE room_id IS NULL LIMIT ? OFFSET ?";
+    private static final String SQL_INSERT_ORDER = "INSERT INTO orders (id, places, type, date_in, date_out, user_id) VALUES (DEFAULT, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE_ROOM = "UPDATE orders SET room_id=?, sum=? WHERE id=?";
-    private static final String SQL_GET_BY_ID = "SELECT * FROM orders LEFT JOIN room_types ON orders.type_id = room_types.id LEFT JOIN users u on orders.user_id = u.id WHERE orders.id=?";
-    private static final String SQL_SELECT_ALL_BY_USER = "SELECT * FROM orders  LEFT JOIN room_types ON orders.type_id = room_types.id LEFT JOIN users u on orders.user_id = u.id WHERE user_id=?";
+    private static final String SQL_GET_BY_ID = "SELECT * FROM orders LEFT JOIN users u on orders.user_id = u.id WHERE orders.id=?";
+    private static final String SQL_SELECT_ALL_BY_USER = "SELECT * FROM orders LEFT JOIN users u on orders.user_id = u.id WHERE user_id=?";
     private static final String SQL_DELETE_BY_ID = "DELETE FROM orders WHERE id=?";
     private static final String SQL_ORDERS_COUNT = "SELECT COUNT(*) FROM orders";
 
@@ -39,7 +39,7 @@ public class OrderDaoMySql implements OrderDao {
             stmt = con.prepareStatement(SQL_INSERT_ORDER);
             int k = 0;
             stmt.setInt(++k, order.getPlaces());
-            stmt.setLong(++k, order.getType().getId());
+            stmt.setString(++k, order.getType().name());
             stmt.setDate(++k, order.getDateIn(), Calendar.getInstance());
             stmt.setDate(++k, order.getDateOut(), Calendar.getInstance());
             stmt.setLong(++k, order.getUser().getId());
@@ -190,11 +190,7 @@ public class OrderDaoMySql implements OrderDao {
         order.setDateOut(rs.getDate("date_out"));
         order.setPlaces(rs.getInt("places"));
         order.setSum(rs.getDouble("sum"));
-        RoomType type = new RoomType();
-        type.setName(rs.getString("room_types.name"));
-        type.setId(rs.getLong("type_id"));
-        order.setType(type);
+        order.setType(RoomType.valueOf(rs.getString("type")));
         return order;
     }
-
 }

@@ -1,5 +1,6 @@
-package com.nure.command;
+package com.nure.command.common;
 
+import com.nure.command.Command;
 import com.nure.command.util.PathUtil;
 import com.nure.entity.Bill;
 import com.nure.entity.Role;
@@ -17,7 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-public class RoomDescriptionCommand implements Command{
+/**
+ * Room command with book information for client and schedule for admin.
+ */
+public class RoomDescriptionCommand implements Command {
     private static final Logger LOG = Logger.getLogger(RoomDescriptionCommand.class);
 
     @Override
@@ -31,30 +35,14 @@ public class RoomDescriptionCommand implements Command{
         request.setAttribute("roomId", roomIdReq);
         Long roomId = Long.parseLong(roomIdReq);
 
-        if (Role.ADMIN.equals(session.getAttribute("userRole"))){
+        if (Role.ADMIN.equals(session.getAttribute("userRole"))) {
             BillService billService = new BillServiceImpl();
             List<Bill> bills = billService.getBillByRoom(roomId);
             request.setAttribute("bills", bills);
         } else {
             Room room = roomService.getRoomById(roomId);
-
-            /*File imgPath = new File("/WEB-INF/images/1.jpg");
-            try {*/
-                /*BufferedImage bufferedImage = ImageIO.read(imgPath);
-                WritableRaster raster = bufferedImage .getRaster();
-                DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
-                byte[] content = data.getData();
-                response.setContentType(request.getServletContext().getMimeType("1.jpg"));
-                response.setContentLength(content.length);
-                response.getOutputStream().write(content);*/
-                request.setAttribute("image", "1.jpg");
-            /*} catch (IOException e) {
-                e.printStackTrace();
-            }*/
-
             request.setAttribute("roomDesc", room.getDescription());
         }
-
         request.setAttribute("message", request.getParameter("message"));
         LOG.debug("Command finished");
         return Path.PAGE_ROOM_DESCRIPTION;

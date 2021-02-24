@@ -1,10 +1,10 @@
-package com.nure.command;
+package com.nure.command.client;
 
+import com.nure.command.Command;
 import com.nure.command.util.PathUtil;
 import com.nure.entity.Role;
 import com.nure.entity.User;
 import com.nure.exception.AppException;
-import com.nure.exception.ValidationException;
 import com.nure.service.UserService;
 import com.nure.service.impl.UserServiceImpl;
 import com.nure.util.Path;
@@ -14,6 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Registration command.
+ *
+ */
 public class RegisterClientCommand implements Command {
     private static final Logger LOG = Logger.getLogger(RegisterClientCommand.class);
 

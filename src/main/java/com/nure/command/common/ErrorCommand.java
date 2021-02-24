@@ -1,11 +1,15 @@
-package com.nure.command;
+package com.nure.command.common;
 
+import com.nure.command.Command;
 import com.nure.exception.AppException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-public class ErrorCommand implements Command{
+/**
+ * Error command.
+ *
+ */
+public class ErrorCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         request.setAttribute("errorMessage", request.getParameter("errorMessage"));

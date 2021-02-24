@@ -2,7 +2,10 @@ package com.nure.command.util;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
+/**
+ * Saving path of current page to session.
+ *
+ */
 public class PathUtil {
     public static void saveCurrentPathToSession(HttpServletRequest request){
         HttpSession session = request.getSession();

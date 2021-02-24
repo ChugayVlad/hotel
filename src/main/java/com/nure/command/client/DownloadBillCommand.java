@@ -1,4 +1,4 @@
-package com.nure.command;
+package com.nure.command.client;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -7,6 +7,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.nure.command.Command;
 import com.nure.entity.Bill;
 import com.nure.exception.AppException;
 import com.nure.service.BillService;
@@ -23,7 +24,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.stream.Stream;
-
+/**
+ * Download bill command.
+ *
+ */
 public class DownloadBillCommand implements Command {
     private static final Logger LOG = Logger.getLogger(DownloadBillCommand.class);
 

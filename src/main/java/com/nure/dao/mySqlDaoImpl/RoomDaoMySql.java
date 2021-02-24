@@ -20,11 +20,11 @@ import java.util.List;
 public class RoomDaoMySql implements RoomDao {
     private static final Logger LOG = Logger.getLogger(RoomDaoMySql.class);
 
-    private static final String SQL_SELECT_ALL = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id ORDER BY %s LIMIT ? OFFSET ?";
-    private static final String SQL_SELECT_ALL_BY_STATUS = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id WHERE status=? ORDER BY %s LIMIT ? OFFSET ?";
+    private static final String SQL_SELECT_ALL = "SELECT * FROM rooms ORDER BY %s LIMIT ? OFFSET ?";
+    private static final String SQL_SELECT_ALL_BY_STATUS = "SELECT * FROM rooms WHERE status=? ORDER BY %s LIMIT ? OFFSET ?";
     private static final String SQL_UPDATE_STATUS = "UPDATE rooms SET status = ? WHERE id=?";
-    private static final String SQL_SELECT_BY_ID = "SELECT * FROM rooms LEFT JOIN room_types ON rooms.type_id = room_types.id WHERE rooms.id=?";
-    private static final String SQL_SELECT_ALL_BY_PARAMETERS = "select * from rooms r LEFT JOIN room_types on r.type_id = room_types.id where r.type_id=? AND r.places=? AND r.id not in (select b.room_id from bills b where ? BETWEEN b.date_in AND b.date_out OR ? BETWEEN b.date_in AND b.date_out)";
+    private static final String SQL_SELECT_BY_ID = "SELECT * FROM rooms WHERE rooms.id=?";
+    private static final String SQL_SELECT_ALL_BY_PARAMETERS = "select * from rooms r where r.type=? AND r.places=? AND r.id not in (select b.room_id from bills b where ? BETWEEN b.date_in AND b.date_out OR ? BETWEEN b.date_in AND b.date_out)";
     private static final String SQL_ROOMS_COUNT = "SELECT COUNT(*) FROM rooms";
     private static final String SQL_ROOMS_COUNT_BY_STATUS = "SELECT COUNT(*) FROM rooms WHERE status=?";
 
@@ -126,13 +126,13 @@ public class RoomDaoMySql implements RoomDao {
     }
 
     @Override
-    public List<Room> findRoomsByParameters(Integer places, Long typeId, Date dateIn, Date dateOut) throws DAOException {
+    public List<Room> findRoomsByParameters(Integer places, String type, Date dateIn, Date dateOut) throws DAOException {
         List<Room> rooms = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
             pstmt = con.prepareStatement(SQL_SELECT_ALL_BY_PARAMETERS);
-            pstmt.setLong(1, typeId);
+            pstmt.setString(1, type);
             pstmt.setInt(2, places);
             pstmt.setDate(3, dateIn);
             pstmt.setDate(4, dateOut);
@@ -201,10 +201,7 @@ public class RoomDaoMySql implements RoomDao {
         room.setDescription(rs.getString("description"));
         room.setStatus(RoomStatus.valueOf(rs.getString("status")));
         room.setImage(rs.getString("image"));
-        RoomType type = new RoomType();
-        type.setId(rs.getLong("type_id"));
-        type.setName(rs.getString("room_types.name"));
-        room.setType(type);
+        room.setType(RoomType.valueOf(rs.getString("type")));
         return room;
     }
 }
