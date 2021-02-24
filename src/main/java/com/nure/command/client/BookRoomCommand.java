@@ -23,7 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Timer;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Book room command
  *
@@ -71,7 +74,7 @@ public class BookRoomCommand implements Command {
         }
 
         Timer timer = new Timer();
-        timer.schedule(new DeleteBillJob(bill),30000);
+        timer.schedule(new DeleteBillJob(bill), TimeUnit.MILLISECONDS.convert(2, TimeUnit.DAYS));
 
         LOG.debug("Command finished");
         return Path.COMMAND_OPEN_PERSONAL_ACCOUNT;
